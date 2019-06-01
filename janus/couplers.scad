@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 use <Threading.scad>    // https://www.thingiverse.com/thing:1659079
-use <hooks.scad>
+
 
 module coupler(od, hook=true)
 {
@@ -37,10 +37,7 @@ module coupler(od, hook=true)
         translate([0,0,-.1])
         cylinder(coupler_height+1, w2, w2);
     }
-    if(hook)
-        hook(od, od*0.25);
-
-}
+   }
 
 module coupler_eject(od, hook=true)
 {
@@ -60,8 +57,7 @@ module coupler_eject(od, hook=true)
         cylinder(coupler_height+1, w2, w2);
     }
     
-    if(hook)
-        hook(od-.6, od*0.25);
+  
 
 }
 
@@ -160,7 +156,7 @@ module male_coupler_with_shock_cord_attachment(od, coupler_height)
 }
 module female_coupler(od, coupler_height)
 {
-    Threading(pitch = 2, d=od, windings=coupler_height); 
+    Threading(pitch = 2., d=od, windings=coupler_height); 
 }
 
 
@@ -174,9 +170,9 @@ module male_coupler_with_motor_tube_lock(od, motor_tube_od, coupler_height)
     
     difference() {
         translate([0,0,0])   
-        threading(pitch = 2, d=2*w1, windings=coupler_height/2, full=true); 
+        threading(pitch = 2., d=2*w1, windings=coupler_height/2., full=true); 
         translate([0,0,-.1])
-        cylinder(coupler_height+3, w2, w2);
+        cylinder(coupler_height+10, w2, w2);
 
     }
 
@@ -191,7 +187,6 @@ module male_coupler_with_motor_tube_lock(od, motor_tube_od, coupler_height)
     
     // attach inner and outer couplers
     for(a = [0:36:360]) {
-        echo(a);
         rotate([0,0,a])
             translate([(w2+tube_support_od)/2,0,coupler_height/2.0])
                 cube([w2-tube_support_od+0.01,1,coupler_height], center=true);

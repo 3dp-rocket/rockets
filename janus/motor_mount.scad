@@ -154,16 +154,20 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
                 translate([0, 0, ring_height+motor_height/2.-5])
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
-                translate([0, 0, ring_height+motor_height-5])
-                    hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
+                translate([0, 0, ring_height+motor_height-20])
+                    hcylinder(20, rocket_id/2.0, motor_tube_od/2.0);
                 
                 
             }
             
         }
 
+        // this section removes a conical space 
+        // so the top edge won't need to use supporters when printed
+        // the engine mount should be printed upside-down
+        translate([0,0,motor_height+ring_height-rocket_id+0.001])
+        cylinder(rocket_id, 0, rocket_id/2);
         
-        //
      }
    
 }
