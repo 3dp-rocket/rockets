@@ -31,8 +31,6 @@ use <parachute_compartment.scad>
 use <extension_tube.scad>
 use <piston.scad>
 use <motor_mount.scad>
-
-
 use <retainer.scad>
 
 part = "all";
@@ -108,7 +106,7 @@ parachute_compartment_height = min(100 + 3*motor_od + (7.5188 * motor_od-body_he
 
 extension_tube_height = parachute_compartment_height; 
 
-motor_overhang = (motor_type == MOTOR_AEROTECH_TYPE)?8.5:5; // motor overhang for easier removal
+motor_overhang = (motor_type == MOTOR_AEROTECH_TYPE)?5.5:5; // motor overhang for easier removal
 
 pitch = 1.25;  // retainer screw pitch
 windings = 5;  // retainer screw windings
@@ -118,7 +116,7 @@ retainer_male_base_h = 2; // base under male screw
 retainer_male_height = pitch * (windings +1) + retainer_male_base_h; 
 retainer_male_base_od = (rocket_id);
 
-retainer_male_od = motor_od * 1.36; //+4.4;
+retainer_male_od = (rocket_id + motor_tube_od) /2.0; // see motor_mount.scad
 
 
 LUG_ROD_1_8 = 1;
@@ -155,7 +153,7 @@ echo("retainer OD", retainer_male_od);
 
 module exploded_view()
 {
-    top = printer_max_height *5;
+    top = printer_max_height *5 - 40;
     translate([0,0,top])
     rocket_nose(h=nose_tube_height, body_id=rocket_id);
     
@@ -203,6 +201,9 @@ translate([0,0,top-4*coupler_height - instrument_compartment_height - parachute_
         }
     }
 
+    translate([0,0,0])
+    retainer_nut(retainer_male_od*1.2,retainer_male_od+0.5, motor_overhang+0.6*motor_tube_id, pitch);
+
 }
 
 module arrange(dx=40, dy=30) 
@@ -238,10 +239,8 @@ else
         //    module_retainer_male(retainer_male_base_h, retainer_male_base_od, pitch,//            retainer_male_od, windings, motor_od/2.0, motor_tube_id/2.0);
         
         if (part=="retainer")
-            retainer_nut(retainer_male_od*1.2,retainer_male_od+0.5, motor_overhang+4, pitch);
-        //thread_od = (rocket_id+motor_tube_od)/2.;
-        //if (part=="coupler" ||  part=="all")
-        //    hook(rocket_id, rocket_id*0.25);
+            retainer_nut(retainer_male_od*1.2,retainer_male_od+0.5, motor_overhang+0.6*motor_tube_id, pitch);
+
         
         if (part=="nose")
             rocket_nose(h=nose_tube_height, body_id=rocket_id);
