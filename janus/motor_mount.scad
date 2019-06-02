@@ -32,7 +32,7 @@ LUG_ROD_1_8 = 1;
 LUG_ROD_3_16 = 2;
 LUG_RAIL_8010 =3;
 
-module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height, fin_height, fin_slot_width, fin_slot_height, launch_lug_type)
+module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height, fin_height, fin_slot_width, fin_slot_height, launch_lug_type, add_thrust_stopper=false)
 {
     motor_support_thickness = 0.1 * motor_tube_id;
     motor_tube_od = (motor_tube_id + motor_support_thickness) ;
@@ -40,13 +40,15 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
     // rocket outer shell
     w1 = rocket_od/2.;
     ring_height = 0.6 * motor_tube_id; 
+    echo(rocket_od);
     difference() {
         union() {
             translate([0,0,ring_height])
+                // outer shell
                 hcylinder(motor_tube_height-ring_height, w1, rocket_id/2.0);
             
             // motor mount
-            motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height,  fin_height, fin_slot_width, ring_height);
+            motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height,  fin_height, fin_slot_width, ring_height, add_thrust_stopper);
         }
         
         fin_slots(motor_tube_od, fin_height,fin_slot_width, motor_tube_height, ring_height, fin_slot_height);
@@ -74,12 +76,12 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
             rotate([0,0,60+15])
             {
                 lug_x = 0.99*(rocket_id)/2 + lug_od/2 + rocket_wall_width + block_width/2;
-                translate([lug_x,0,fin_height*.1 ])
+                translate([lug_x,0,ring_height + lug_length/2 ])
                 {
                     lug(lug_od, lug_id, lug_length, block_width);
                 }
             
-                translate([lug_x,0,rocket_id])
+                translate([lug_x,0,motor_tube_height-lug_length])
                 {
                     lug(lug_od, lug_id, lug_length, block_width);
                 }
@@ -108,23 +110,24 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
     
 }
 
-module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_height, fin_slot_width, ring_height)
+module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_height, fin_slot_width, ring_height, add_thrust_stopper)
 {
-    // engine mount
+    // motor mount
    
 
     difference() {
         union()
         {
+            w2 = motor_tube_id / 2.0;
             translate([0,0,ring_height])
-            difference() {
                 color("yellow", 0.6)
-                cylinder(motor_height, motor_tube_od/2., motor_tube_od/2.);
-                
-                w2 = motor_tube_id / 2.0;
-                translate([0,0,-.1])
-                cylinder(motor_height+1, w2, w2);
-            }
+                hcylinder(motor_height, motor_tube_od/2., w2);
+            
+            if (add_thrust_stopper)
+                translate([0,0,motor_height])
+                    hcylinder(10, w2, 0.7*w2);
+            
+            // thread for motor retainer
             thread_od = (rocket_id+motor_tube_od)/2.;
             pitch = 1.5;
             color("blue")
@@ -152,9 +155,9 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
                 
                 translate([0, 0, ring_height])
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
-                translate([0, 0, ring_height+motor_height/2.-5])
+                translate([0, 0, motor_height/2.])
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
-                translate([0, 0, ring_height+motor_height-20])
+                translate([0, 0, motor_height])
                     hcylinder(20, rocket_id/2.0, motor_tube_od/2.0);
                 
                 
@@ -165,8 +168,8 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
         // this section removes a conical space 
         // so the top edge won't need to use supporters when printed
         // the engine mount should be printed upside-down
-        translate([0,0,motor_height+ring_height-rocket_id+0.001])
-        cylinder(rocket_id, 0, rocket_id/2);
+        //translate([0,0,motor_height+ring_height-rocket_id+0.001])
+        //cylinder(rocket_id, 0, rocket_id/2);
         
      }
    
@@ -208,7 +211,7 @@ function polygon_slot(fin_slot_height,fin_slot_width) =
 [[-fin_slot_width/2.,0],[-fin_slot_width/3.,fin_slot_height],[fin_slot_width/3.,fin_slot_height],[fin_slot_width/2.,0] ];
 
 
-fin_motor_mount(rocket_od=55.52, rocket_id=50.47, motor_tube_od=35.42, motor_tube_id=32.2, motor_height=114, motor_tube_height=154, fin_slot_width=4.84211, fin_slot_height=10.05, fin_height=70, launch_lug_type=3, $fn = 100);
+fin_motor_mount(rocket_od=55.52, rocket_id=50.47, motor_tube_od=35.42, motor_tube_id=32.2, motor_height=114, motor_tube_height=180, fin_slot_width=4.84211, fin_slot_height=10.05, fin_height=70, launch_lug_type=3, add_thrust_stopper=true, $fn = 100);
 
 
 

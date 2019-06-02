@@ -46,14 +46,11 @@ E = 5;
 F = 6;
 
 
-MOTOR_ESTES_TYPE = 1;   // support inside tube
-MOTOR_AEROTECH_TYPE =2; // motor has its own support ring - retainer is larger
-
 
 //*********************************************
 // Set these variables.
-model = F;  // a,A,B,C....F
-motor_type = MOTOR_AEROTECH_TYPE;  
+model = C;  // a,A,B,C....F
+add_thrust_stopper = False;
 paper_tube_wall_thickness = 1.6; // mm
 //*********************************************
 
@@ -91,8 +88,6 @@ fin_height = 2.05 * rocket_id;
 fin_slot_width=0.15037594 * motor_tube_id;
 fin_slot_height = (rocket_od-motor_tube_od)/2;
 
-// the thrust stopper won't be created if motor_type != ESTES
-thrust_height = motor_type == MOTOR_ESTES_TYPE?10:0;
 body_height = min(7.5188 * motor_od ,printer_max_height);
 
 nose_tube_height = 6 * motor_od;
@@ -106,7 +101,7 @@ parachute_compartment_height = min(100 + 3*motor_od + (7.5188 * motor_od-body_he
 
 extension_tube_height = parachute_compartment_height; 
 
-motor_overhang = (motor_type == MOTOR_AEROTECH_TYPE)?5.5:5; // motor overhang for easier removal
+motor_overhang = 5; // motor overhang 
 
 pitch = 1.25;  // retainer screw pitch
 windings = 5;  // retainer screw windings
@@ -186,7 +181,7 @@ arrange()
 
         if (part=="motor_mount" || part=="all" || part == "fin") {
             if (part=="motor_mount" || part=="all")
-            fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height,  fin_height,fin_slot_width, fin_slot_height, launch_lug_type);
+            fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height,  fin_height,fin_slot_width, fin_slot_height, launch_lug_type, add_thrust_stopper);
 
             if (part=="fin"|| part=="all")
                 for (a=[0:360/3:360]) {
