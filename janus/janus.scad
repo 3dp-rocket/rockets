@@ -52,6 +52,7 @@ F = 6;
 model = F;  // a,A,B,C....F
 add_thrust_stopper = false;
 paper_tube_wall_thickness = 1.6; // mm
+motor_ring_height = 10.; // height of ring around composite motor (0 for estes, 10 aerotech)
 //*********************************************
 
 MOTOR_OD = 0;
@@ -69,7 +70,7 @@ rocket_parameters = [
 
 ];
 
-printer_max_height = 200;
+printer_max_height = 200.0;
 
 p = rocket_parameters[model];
 
@@ -101,7 +102,6 @@ parachute_compartment_height = min(100 + 3*motor_od + (7.5188 * motor_od-body_he
 
 extension_tube_height = parachute_compartment_height; 
 
-motor_overhang = 5; // motor overhang 
 
 pitch = 1.25;  // retainer screw pitch
 windings = 5;  // retainer screw windings
@@ -173,7 +173,10 @@ arrange()
     {
 
         if (part=="retainer" || part=="all")
-            retainer_nut(retainer_male_od*1.2,retainer_male_od+0.5, motor_overhang+0.6*motor_tube_id, pitch);
+            // 0.6 * motor_tube_id currenlty hardcode in motor mount
+            // pitch = 1.5 currentlry hardcoded in motor mount 
+
+            retainer_nut(rocket_od,retainer_male_od+0.5, motor_ring_height+0.6*motor_tube_id, pitch=1.5);  // bug: should be pitch = pitch but hardcoded in motor mount to be 1.5
 
 
         if (part=="motor_mount" || part=="all" || part == "fin") {

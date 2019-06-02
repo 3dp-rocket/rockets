@@ -25,18 +25,20 @@ SOFTWARE.
 use <Threading.scad>    // https://www.thingiverse.com/thing:1659079
 
 
-module retainer_nut(D,d, motor_overhang, pitch) {
+module retainer_nut(od,id, height, pitch) {
     union() {
-           wo = motor_overhang/pitch;
-           Threading(pitch = pitch, D=D, d=d, windings=6+wo,  $fn=26); 
+           
+           windings = height/pitch;
+           translate([0,0,2])
+            Threading(pitch = pitch, D=od, d=id, windings=windings,  $fn=100); 
            difference() {
-               cylinder(2, D/2,D/2, $fn=26); //base
+               cylinder(3, od/2.,od/2., $fn=100); //base
                translate([0,0,-.1])
-               cylinder(2.2, d*.3, d*.3); // hole in base
+               cylinder(4.0, id*.3, id*.3); // hole in base
            }
 
     }
     
 }
 
-retainer_nut(50, 40, 10, 1.);
+retainer_nut(50, 40, 20, 1.5);

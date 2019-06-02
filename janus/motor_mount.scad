@@ -124,6 +124,7 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
                 hcylinder(motor_height, motor_tube_od/2., w2);
             
             if (add_thrust_stopper)
+                color("blue")
                 translate([0,0,motor_height])
                     hcylinder(10, w2, 0.7*w2);
             
@@ -157,8 +158,8 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
                 translate([0, 0, motor_height/2.])
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
-                translate([0, 0, motor_height])
-                    hcylinder(20, rocket_id/2.0, motor_tube_od/2.0);
+                translate([0, 0, motor_height+15])
+                    hcylinder(15, rocket_id/2.0, motor_tube_od/2.0);
                 
                 
             }
@@ -168,8 +169,9 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
         // this section removes a conical space 
         // so the top edge won't need to use supporters when printed
         // the engine mount should be printed upside-down
-        //translate([0,0,motor_height+ring_height-rocket_id+0.001])
-        //cylinder(rocket_id, 0, rocket_id/2);
+        //if (add_thrust_stopper)
+        translate([0,0,motor_height-rocket_id/2+5])
+        cylinder(rocket_id, 0, rocket_id/2);
         
      }
    
@@ -211,7 +213,7 @@ function polygon_slot(fin_slot_height,fin_slot_width) =
 [[-fin_slot_width/2.,0],[-fin_slot_width/3.,fin_slot_height],[fin_slot_width/3.,fin_slot_height],[fin_slot_width/2.,0] ];
 
 
-fin_motor_mount(rocket_od=55.52, rocket_id=50.47, motor_tube_od=35.42, motor_tube_id=32.2, motor_height=114, motor_tube_height=180, fin_slot_width=4.84211, fin_slot_height=10.05, fin_height=70, launch_lug_type=3, add_thrust_stopper=true, $fn = 100);
+fin_motor_mount(rocket_od=55.52, rocket_id=50.47, motor_tube_od=35.42, motor_tube_id=32.2, motor_height=114, motor_tube_height=190, fin_slot_width=4.84211, fin_slot_height=10.05, fin_height=70, launch_lug_type=3, add_thrust_stopper=false, $fn = 100);
 
 
 
