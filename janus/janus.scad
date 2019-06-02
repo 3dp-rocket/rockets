@@ -192,13 +192,13 @@ arrange()
         }
     }
 
-    if (part=="coupler" || part == "all")
+    if (part=="coupler1" || part == "all")
         male_coupler_with_motor_tube_lock(rocket_id-0.5, motor_tube_id, coupler_height);
 
     if (part=="extension" || part=="all")
         extension_tube(parachute_compartment_height, rocket_id, motor_tube_id); 
 
-    if (part=="coupler" || part == "all")
+    if (part=="coupler2" || part == "all")
         male_coupler_threaded(rocket_id-0.5, coupler_height);
 
     if (part=="parachute" || part=="all" || part == "piston") {
@@ -209,14 +209,14 @@ arrange()
                 piston(rocket_id);
     }
 
-    if (part=="coupler" || part == "all")
+    if (part=="coupler3" || part == "all")
         male_coupler_with_shock_cord_attachment(od=rocket_id-0.5, coupler_height=coupler_height);
 
     if (part=="instrument" || part=="all") {
             instrument_compartment(instrument_compartment_height, rocket_id, vent_hole_od);
      }
 
-    if (part=="coupler" || part == "all")
+    if (part=="coupler4" || part == "all")
         male_coupler_threaded(rocket_id-0.5, coupler_height);
  
        if (part=="nose" || part == "all")
