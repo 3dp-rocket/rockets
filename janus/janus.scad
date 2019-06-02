@@ -49,8 +49,8 @@ F = 6;
 
 //*********************************************
 // Set these variables.
-model = C;  // a,A,B,C....F
-add_thrust_stopper = False;
+model = F;  // a,A,B,C....F
+add_thrust_stopper = false;
 paper_tube_wall_thickness = 1.6; // mm
 //*********************************************
 
@@ -120,6 +120,7 @@ LUG_RAIL_8010 =3;
 
 launch_lug_type = motor_od < 14 ? LUG_ROD_1_8 : motor_od < 25 ? LUG_ROD_3_16 : LUG_RAIL_8010;
 
+echo("part:", part);
 echo("rocket OD:", rocket_od);
 echo("rocket ID:", rocket_id);
 
@@ -142,10 +143,6 @@ echo("parachute_compartment_height:", parachute_compartment_height);
 echo("nose cone total height", nose_tube_height);
 echo("nose cone height", nose_tube_height * 2/3);
 echo("nose base", nose_tube_height * 1/3);
-echo("wall thickness", rocket_id*0.05);
-
-echo("retainer OD", retainer_male_od);
-
 
 
 // define heigth of each layer
@@ -168,7 +165,7 @@ module arrange()
 }
 
 /*
-Arrange creates an exploded view of all parts. It uses layers[] to calculate the height of each layer.
+Arrange() creates an exploded view of all parts. It uses layers[] to calculate the height of each layer.
 The variable 'part' can be specified to build (create STL's) for only a specific set of parts. See batch.sh for examples. 
 
 */
@@ -183,10 +180,13 @@ arrange()
             if (part=="motor_mount" || part=="all")
             fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height,  fin_height,fin_slot_width, fin_slot_height, launch_lug_type, add_thrust_stopper);
 
+
             if (part=="fin"|| part=="all")
-                for (a=[0:360/3:360]) {
+                // when part is set to 'fin' as in batch.sh the fin is printed
+                // on the right orientation for printing
+                for (a=[0:360/3:part=="all"?360:0]) {
                     translate([0,0,fin_height+20])
-                    rotate([0,90,a+15])
+                    rotate([0,part == "all" ? 90 : 0,a+15])
                     translate([0,0,rocket_id])
                     fin(fin_height, fin_slot_width, fin_slot_height);
         }
@@ -201,11 +201,12 @@ arrange()
     if (part=="coupler" || part == "all")
         male_coupler_threaded(rocket_id-0.5, coupler_height);
 
-    if (part=="parachute" || part=="all") {
-        parachute_compartment(parachute_compartment_height, rocket_id);
-        //if (part=="piston")
-        translate([rocket_id,rocket_id,0])
-            piston(rocket_id);
+    if (part=="parachute" || part=="all" || part == "piston") {
+        if (part=="parachute" || part == "all")
+            parachute_compartment(parachute_compartment_height, rocket_id);
+        if (part=="piston" || part == "all")
+            translate([rocket_id,rocket_id,0])
+                piston(rocket_id);
     }
 
     if (part=="coupler" || part == "all")
