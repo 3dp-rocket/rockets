@@ -181,6 +181,7 @@ arrange()
 
         if (part=="motor_mount" || part=="all" || part == "fin") {
             if (part=="motor_mount" || part=="all")
+                rotate([0,part=="motor_mount" ? 180 : 0,0]) // roatate for proper print orientation
             fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height,  fin_height,fin_slot_width, fin_slot_height, launch_lug_type, add_thrust_stopper);
 
 
