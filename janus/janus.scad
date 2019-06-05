@@ -148,7 +148,7 @@ echo("nose base", nose_tube_height * 1/3);
 // define heigth of each layer
 coupler_height = rocket_od * 0.8; 
 
-layers = [30,motor_tube_height,coupler_height,200,coupler_height,parachute_compartment_height, coupler_height, instrument_compartment_height, coupler_height, 300];
+layers = [30,motor_tube_height,coupler_height,200,coupler_height,parachute_compartment_height, coupler_height*1.5, instrument_compartment_height, coupler_height, 300];
 
 // return sum of array elements from i to n
 // a[1,2,3] 
@@ -214,7 +214,7 @@ arrange()
     }
 
     if (part=="coupler3" || part == "all")
-        male_coupler_with_shock_cord_attachment(od=rocket_id-0.5, coupler_height=coupler_height);
+        male_coupler_with_shock_cord_attachment(od_threaded=rocket_id-0.5, od_smooth=rocket_id, coupler_height=coupler_height*1.5);
 
     if (part=="instrument" || part=="all") {
             instrument_compartment(instrument_compartment_height, rocket_id, vent_hole_od);

@@ -118,18 +118,19 @@ module m2coupler(od, coupler_height)
  
 }
 
-module male_coupler_with_shock_cord_attachment(od, coupler_height)
+module male_coupler_with_shock_cord_attachment(od_threaded, od_smooth, coupler_height)
 {
     // coupler
-    wall_thickness = 0.075 * od;
-    w1 = od/2;
+    wall_thickness = 0.075 * od_threaded;
+    w1 = od_threaded/2.;
     color(alpha=0.5)
     difference() {
         translate([0,0,0])   
         union() {
-            threading(pitch = 2, d=2*w1, windings=coupler_height/4, full=true); 
-            translate([0,0,coupler_height/2])   
-            cylinder(coupler_height/2, w1, w1);
+            pitch=2;
+            threading(pitch = pitch, d=2*w1, windings=(coupler_height/pitch)/3, full=true); 
+            translate([0,0,coupler_height/3])   
+            cylinder(2*coupler_height/3, od_smooth/2, od_smooth/2);
         }
         w2 = w1 - wall_thickness;
         translate([0,0,-.1])
@@ -144,11 +145,11 @@ module male_coupler_with_shock_cord_attachment(od, coupler_height)
         // cord mount
         mh = coupler_height;
         translate([0,0,mh/2])
-        cube([od/4,od-2*wall_thickness,mh], center=true);
+        cube([od_smooth/4.,od_smooth-wall_thickness,mh], center=true);
         for(d = [5,-5]) {
-            translate([-od/2,d,coupler_height/2])
+            translate([-od_smooth/2,d,2.*coupler_height/3.])
             rotate([0,90,0])
-                cylinder(od,2,2);
+                cylinder(od_smooth,2.5,2.5);
         }
         
     }
@@ -208,6 +209,6 @@ translate([100,0,0])
     male_coupler_with_motor_tube_lock(50, 29, 20, $fn=100);
 
 translate([200,0,0])
-    male_coupler_with_shock_cord_attachment(od=50, coupler_height=40, $fn=100);
+    male_coupler_with_shock_cord_attachment(od_threaded=40.5, od_smooth=40,coupler_height=40, $fn=100);
 
 
