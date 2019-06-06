@@ -7,6 +7,6 @@ People are encourged to join and add designs they made with other tools. As we l
 
 We want rocket designs to be safe and sound and to follow standard rocket design rules. So we also encourgae contributors to provide documentation about how parts were stress tested and OpenRocket model/simulation results as well as real field test results.
 
-
+You will find common parts under the 'parts' folder and the first rocket design in this project under 'Janus'. Feel free to add new designs or new parts you have been devloping. Make sure to add a header to your files with you name to get propper attribution. 
 
 
