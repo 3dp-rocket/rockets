@@ -2,6 +2,7 @@
 
 This rocket has been designed so parts can be replaced and assembled without the use of glue. A [blue tube](https://www.alwaysreadyrocketry.com/) is recommended to insulate the motor from the rocket motor support tube.If you use other tubes, you will need to adjust the paper_tube_wall_thickness setting accordingly.
 
+[OpenRocket Model](./OpenRocket-29mm.pdf)
 
 Other parts:
 * [Kevlar shock cord](https://www.amazon.com/gp/product/B00OVI9XE6/) or similar.
