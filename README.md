@@ -10,3 +10,4 @@ We want rocket designs to be safe and sound and to follow standard rocket design
 You will find common parts under the 'parts' folder and the first rocket design in this project under 'Janus'. Feel free to add new designs or new parts you have been devloping. Make sure to add a header to your files with you name to get propper attribution. 
 
 
+To join this project please create an [issue](https://github.com/3dp-rocket/rockets/issues) and type access request in the description. 
