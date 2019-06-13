@@ -191,7 +191,7 @@ arrange()
                     translate([0,0,fin_length+20])
                     rotate([0,part == "all" ? 90 : 0,a+15])
                     translate([0,0,rocket_id])
-                    fin(fin_height, fin_length, fin_slot_width, fin_slot_height, fin_height*0.1);
+                    fin(fin_height, fin_length, fin_slot_width, fin_slot_height, fin_height*0.1, fin_type=0);
                 }
         }
     }

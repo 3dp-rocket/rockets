@@ -26,17 +26,21 @@ SOFTWARE.
 use <../parts/fin.scad>
 
 // Renders a fin and the fin support that fits into the motor tube slot
-module fin(h, l, fin_slot_width, fin_slot_height, b=0) {
+module fin(semi_span, root_chord, fin_slot_width, fin_slot_height, b=0, fin_type=0) {
     
-    translate([0,0,fin_slot_height*0.99])
-        fin_delta_clipped(h, l, fin_slot_width, b);
-    
-    key_h = 0.04 * l;
+    translate([0,0,fin_slot_height*0.99]) {
+        if (fin_type==0)
+            fin_delta_clipped(semi_span, root_chord, fin_slot_width, b);
+        if (fin_type==1)
+            fin_ellipsoid(root_chord=root_chord, 
+        semi_span=semi_span, base_width=fin_slot_width);
+    }
+    key_h = 0.04 * root_chord;
     color("blue", 0.5) 
         difference() {
             translate([-key_h, 0, 0])
                 rotate([90,0,90])
-                    linear_extrude(l+1.*key_h)
+                    linear_extrude(root_chord+1.*key_h)
                         polygon(polygon_slot(fin_slot_height, fin_slot_width));
                 
                 translate([-key_h/2, 0, fin_slot_height])
@@ -53,4 +57,4 @@ module fin(h, l, fin_slot_width, fin_slot_height, b=0) {
 function polygon_slot(fin_slot_height,fin_slot_width) = 
 [[-fin_slot_width/2.,0],[-fin_slot_width/3.,fin_slot_height],[fin_slot_width/3.,fin_slot_height],[fin_slot_width/2.,0] ];
 
-fin(60, 100, 5, 4, b=0, $fn=100);
+fin(60, 100, 5, 4, b=0, fin_type=0, $fn=100);

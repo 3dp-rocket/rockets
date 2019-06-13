@@ -33,7 +33,6 @@ module fin_delta_clipped(h, l, base_width, b=0) {
     
     hull() 
     {
-        
         linear_extrude(100*t)
             translate([l/2,0, 0])
                scale([1, t]) circle(r=l/2);
@@ -61,7 +60,6 @@ module fin_ellipsoid(root_chord, semi_span, base_width) {
         m = b/log(b);
         for (i=[1:b/40.:b]) {
             z = m*log(i);
-            echo(z);
             x1 = a-sqrt(1-(z*z)/(b*b)) * a;
             x2 = a+sqrt(1-(z*z)/(b*b)) * a;
             x = x2-x1;
@@ -69,7 +67,7 @@ module fin_ellipsoid(root_chord, semi_span, base_width) {
             translate([x1+x/2+a,0, z]) {
                 if (x>0)
                     linear_extrude(.1)
-                        scale([x,base_width*log(b-z+1.001)/log(b)]) circle(r=1, $fn=100);
+                        scale([x,(base_width/2.)*log(b-z+1.001)/log(b)]) circle(r=1, $fn=100);
                     
             }
         
@@ -78,9 +76,10 @@ module fin_ellipsoid(root_chord, semi_span, base_width) {
     
 }
 
-translate([100,0,0])
-    fin_delta_clipped(h=100, base_width=5, $fn=100);
+translate([105,0,0])
+    fin_delta_clipped(l=100, h=100, base_width=5, $fn=100);
 
 translate([0,0,0])
     fin_ellipsoid(100,100,4);
+
 
