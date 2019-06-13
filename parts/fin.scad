@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 1019 Jose D. Saura
+Copyright (c) 2019 Jose D. Saura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@ SOFTWARE.
 // 
 // More about fins:
 //  https://www.nakka-rocketry.net/fins.html 
+// https://www.rocketryforum.com/threads/fin-surface-nomenclature.10393/
 
 module fin_delta_clipped(h, l, base_width, b=0) {
     
@@ -51,4 +52,35 @@ module fin_delta_clipped(h, l, base_width, b=0) {
 }
 
 
-fin_delta_clipped(h=100, l=150, base_width=5, b=10, $fn=100);
+module fin_ellipsoid(root_chord, semi_span, base_width) {
+    
+    hull() 
+    {
+        a = root_chord/4.0;
+        b = semi_span;
+        m = b/log(b);
+        for (i=[1:b/40.:b]) {
+            z = m*log(i);
+            echo(z);
+            x1 = a-sqrt(1-(z*z)/(b*b)) * a;
+            x2 = a+sqrt(1-(z*z)/(b*b)) * a;
+            x = x2-x1;
+
+            translate([x1+x/2+a,0, z]) {
+                if (x>0)
+                    linear_extrude(.1)
+                        scale([x,base_width*log(b-z+1.001)/log(b)]) circle(r=1, $fn=100);
+                    
+            }
+        
+        }
+    }
+    
+}
+
+translate([100,0,0])
+    fin_delta_clipped(h=100, base_width=5, $fn=100);
+
+translate([0,0,0])
+    fin_ellipsoid(100,100,4);
+
