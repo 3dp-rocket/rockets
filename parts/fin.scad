@@ -55,23 +55,12 @@ module fin_ellipsoid(a, b, base_width) {
     hull() 
     {
         m = b/log(b);
-        //for (z=[0:b/10.:b]) {
         for (i=[1:0.5:b]) {
             z = m*log(i);
-            echo(z);
             x1 = a-sqrt(1-(z*z)/(b*b)) * a;
             x2 = a+sqrt(1-(z*z)/(b*b)) * a;
             x = x2-x1;
-            
-            //translate([x1,0, z])
-            //    scale([1,1]) circle(r=1, $fn=100);
-            
-            //color("red")
-            //translate([x2,0, z])
-            //    scale([1,1]) circle(r=1, $fn=100);
 
-            color("green", alpha=0.3)
-            
             translate([x1+x/2+a,0, z]) {
                 if (x>0)
                     linear_extrude(.1)
@@ -84,8 +73,9 @@ module fin_ellipsoid(a, b, base_width) {
     
 }
 
-//fin_delta_clipped(h=100, base_width=5, $fn=100);
+translate([50,0,0])
+    fin_delta_clipped(h=100, base_width=5, $fn=100);
 
-
-fin_ellipsoid(5,20,5);
+translate([0,0,0])
+    fin_ellipsoid(5,20,5);
 
