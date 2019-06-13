@@ -52,11 +52,12 @@ module fin_delta_clipped(h, base_width) {
 
 module fin_ellipsoid(a, b, base_width) {
     
-    hull() 
+    //hull() 
     {
         m = b/log(b);
-        for (i=[1:0.5:b]) {
+        for (i=[1:b/40.:b]) {
             z = m*log(i);
+            echo(z);
             x1 = a-sqrt(1-(z*z)/(b*b)) * a;
             x2 = a+sqrt(1-(z*z)/(b*b)) * a;
             x = x2-x1;
@@ -73,9 +74,9 @@ module fin_ellipsoid(a, b, base_width) {
     
 }
 
-translate([50,0,0])
+translate([100,0,0])
     fin_delta_clipped(h=100, base_width=5, $fn=100);
 
 translate([0,0,0])
-    fin_ellipsoid(5,20,5);
+    fin_ellipsoid(25,100,5);
 
