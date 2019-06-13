@@ -25,6 +25,7 @@ SOFTWARE.
 // 
 // More about fins:
 //  https://www.nakka-rocketry.net/fins.html 
+// https://www.rocketryforum.com/threads/fin-surface-nomenclature.10393/
 
 module fin_delta_clipped(h, base_width) {
     
@@ -50,10 +51,12 @@ module fin_delta_clipped(h, base_width) {
 }
 
 
-module fin_ellipsoid(a, b, base_width) {
+module fin_ellipsoid(root_chord, semi_span, base_width) {
     
-    //hull() 
+    hull() 
     {
+        a = root_chord/4.0;
+        b = semi_span;
         m = b/log(b);
         for (i=[1:b/40.:b]) {
             z = m*log(i);
@@ -65,7 +68,7 @@ module fin_ellipsoid(a, b, base_width) {
             translate([x1+x/2+a,0, z]) {
                 if (x>0)
                     linear_extrude(.1)
-                        scale([x,log(b-z+1.001)/log(b)]) circle(r=1, $fn=100);
+                        scale([x,base_width*log(b-z+1.001)/log(b)]) circle(r=1, $fn=100);
                     
             }
         
@@ -78,5 +81,5 @@ translate([100,0,0])
     fin_delta_clipped(h=100, base_width=5, $fn=100);
 
 translate([0,0,0])
-    fin_ellipsoid(25,100,5);
+    fin_ellipsoid(100,100,4);
 
