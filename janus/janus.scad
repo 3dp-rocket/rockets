@@ -85,8 +85,9 @@ rocket_id = 1.5675 * motor_tube_id; //1.5038
 rocket_od = rocket_id + 2*0.05*rocket_id;
 
 // fin and fin slot dimensions
-fin_height = 2.05 * rocket_id;
-fin_slot_width=0.15037594 * motor_tube_id;
+fin_height = 2.0 * rocket_id;
+fin_length = fin_height*1.2;
+fin_slot_width=0.25 * motor_tube_id;
 fin_slot_height = (rocket_od-motor_tube_od)/2;
 
 body_height = min(7.5188 * motor_od ,printer_max_height);
@@ -106,10 +107,6 @@ extension_tube_height = parachute_compartment_height;
 pitch = 1.25;  // retainer screw pitch
 windings = 5;  // retainer screw windings
 
-
-retainer_male_base_h = 2; // base under male screw
-retainer_male_height = pitch * (windings +1) + retainer_male_base_h; 
-retainer_male_base_od = (rocket_id);
 
 retainer_male_od = (rocket_id + motor_tube_od) /2.0; // see motor_mount.scad
 
@@ -134,6 +131,7 @@ echo("motor height:", motor_height);
 echo("body height      :", body_height);
 
 echo("fin height       :", fin_height);
+echo("fin length       :", fin_length);
 echo("fin slot width   :", fin_slot_width);
 echo("fin slot height  :", fin_slot_height);
 
@@ -176,23 +174,25 @@ arrange()
             // 0.6 * motor_tube_id currenlty hardcode in motor mount
             // pitch = 1.5 currentlry hardcoded in motor mount 
 
-            retainer_nut(rocket_od,retainer_male_od+0.5, motor_ring_height+0.6*motor_tube_id, pitch=1.5);  // bug: should be pitch = pitch but hardcoded in motor mount to be 1.5
+            retainer_nut(rocket_od,retainer_male_od+0.5, motor_ring_height+0.6*motor_tube_id+2, pitch=1.5);  // bug: should be pitch = pitch but hardcoded in motor mount to be 1.5
 
 
         if (part=="motor_mount" || part=="all" || part == "fin") {
             if (part=="motor_mount" || part=="all")
                 rotate([0,part=="motor_mount" ? 180 : 0,0]) // roatate for proper print orientation
-            fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height,  fin_height,fin_slot_width, fin_slot_height, launch_lug_type, add_thrust_stopper);
+            fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height,  fin_length,fin_slot_width, fin_slot_height, launch_lug_type, add_thrust_stopper);
 
 
-            if (part=="fin"|| part=="all")
+            if (part=="fin"|| part=="all") {
                 // when part is set to 'fin' as in batch.sh the fin is printed
                 // on the right orientation for printing
+                
                 for (a=[0:360/3:part=="all"?360:0]) {
-                    translate([0,0,fin_height+20])
+                    translate([0,0,fin_length+20])
                     rotate([0,part == "all" ? 90 : 0,a+15])
                     translate([0,0,rocket_id])
-                    fin(fin_height, fin_slot_width, fin_slot_height);
+                    fin(fin_height, fin_length, fin_slot_width, fin_slot_height, fin_height*0.1);
+                }
         }
     }
 
