@@ -86,7 +86,7 @@ rocket_od = rocket_id + 2*0.05*rocket_id;
 
 // fin and fin slot dimensions
 fin_height = 2.0 * rocket_id;
-fin_length = fin_height*1.2;
+fin_length = fin_height;
 fin_slot_width=0.25 * motor_tube_id;
 fin_slot_height = (rocket_od-motor_tube_od)/2;
 
