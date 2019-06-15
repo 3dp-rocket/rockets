@@ -14,3 +14,4 @@ To join this project please create an [issue](https://github.com/3dp-rocket/rock
 
 <img src="images/janus.jpg" width="400" alt="Tri-cities - Swoosh - 2019 - Richard V.">
 
+Janus - HM115 DM - Tri-Cities - Swoosh - 2019
