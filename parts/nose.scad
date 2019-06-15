@@ -126,7 +126,7 @@ See janus.scad for more examples
 */
 translate([-50,0,0]) {
     translate([0,0,10])
-        !nose_cone_haack(l=100, r=20, c=1/3, wall_thickness=1, $fn=100);
+        nose_cone_haack(l=100, r=20, c=1/3, wall_thickness=1, $fn=100);
     color("red", 0.6) difference() {
         cylinder(10,20,20, $fn=100);
         translate([0,0,-1])

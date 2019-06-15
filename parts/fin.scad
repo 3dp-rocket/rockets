@@ -37,12 +37,12 @@ module fin_delta_clipped(h, l, base_width, b=0) {
             translate([l/2,0, 0])
                scale([1, t]) circle(r=l/2);
         
-        #translate([0,0, h*0.98])
+        translate([0,0, h*0.98])
         linear_extrude(10*t)
             translate([l*.75-b,0, 33])
                scale([1, t]) circle(r=l/4);
         
-        #translate([l/2-b, 0, h])
+        translate([l/2-b, 0, h])
             rotate([0,90,0])
                 cylinder(l/2, 2*t, 2*t);
         
