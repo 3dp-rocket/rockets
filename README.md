@@ -1,4 +1,4 @@
-# Rockets
+# 3D Printed Rockets
 The goal of this project is to collaborate on designs of rockets and rocket components for 3D printing.
 
 The first set of designs were developed in [OpenSCAD](https://www.openscad.org/). Using OpenSCAD requires some basic programming skills and it is helpful to have some knowledge of basic math and trigonometry. That said, it is easier to work with existing designs, make tweaks and assemble them into new rockets without knowing any math.
@@ -13,3 +13,4 @@ You will find common parts under the 'parts' folder and the first rocket design 
 To join this project please create an [issue](https://github.com/3dp-rocket/rockets/issues) and type access request in the description. 
 
 <img src="images/janus.jpg" width="400" alt="Tri-cities - Swoosh - 2019 - Richard V.">
+
