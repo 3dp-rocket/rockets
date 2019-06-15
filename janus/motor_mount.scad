@@ -158,7 +158,7 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
                 translate([0, 0, motor_height/2.])
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
-                translate([0, 0, motor_height+15])
+                translate([0, 0, motor_height+10])
                     hcylinder(15, rocket_id/2.0, motor_tube_od/2.0);
                 
                 
@@ -173,6 +173,8 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
         translate([0,0,motor_height-rocket_id/2+5])
         cylinder(rocket_id, 0, rocket_id/2);
         
+        //translate([0,0,motor_height-rocket_id/2+5])
+        //cube([100,100,100]);
      }
    
 }
