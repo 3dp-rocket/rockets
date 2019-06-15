@@ -65,8 +65,8 @@ module rail_launch_lug(lug_length=10)
         rotate([55,0,0])
         cube([20,10,40], center=true);
         
-        // hollowed core?
-        translate([0,2.5,0])
+        // remove some material to reduce weight
+        translate([0,3.5,0])
         cylinder(lug_length+1,1.1,1.1);
         
 
