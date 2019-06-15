@@ -13,12 +13,12 @@ Other parts:
 
 Tested with engines:
 * Aeroetch G-80
-* Aerotech H-182R-14A  (9 seconds delay)(*)
+* Aerotech H-182R-14A and H-115  (9 seconds delay)
+
+<img src="janus.png" width=400>
 
 
 
-
-(*) need to re-test
 
 
 

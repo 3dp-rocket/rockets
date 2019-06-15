@@ -1,7 +1,7 @@
-# Images
+# Images - see also [STL](./stl)
 
-<img src ="images/fin_delta_clipped.png">
-<img src ="images/fin_delta_ellipsoid.png">
-<img src ="images/cone.png">
-<img src ="images/launch_lug.png">
-<img src ="stl/fin_delta_clipped.stl">
+<img src ="images/fin_delta_clipped.png" width="400">
+<img src ="images/fin_ellipsoid.png" width="400">
+<img src ="images/nose.png" width="400">
+<img src ="images/launch_lug.png" width="400">
+
