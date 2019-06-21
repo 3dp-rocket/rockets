@@ -53,13 +53,13 @@ module instrument_compartment(instrument_box_height, body_id, vent_hole_od)
     coupler_height = body_id/4.0;
     color("purple", 0.75)
     translate([0,0,2])
-    female_coupler(body_id, coupler_height);
+    female_coupler(body_id-0.5, coupler_height);
 
     // threaded coupler top
     color("purple", 0.75)
     translate([0,0,instrument_box_height-1])
     rotate([0,180,0])
-    female_coupler(body_id, coupler_height);
+    female_coupler(body_id-0.5, coupler_height);
     
 }
 

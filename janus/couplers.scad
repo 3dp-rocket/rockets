@@ -198,9 +198,20 @@ module male_coupler_with_motor_tube_lock(od, motor_tube_od, coupler_height)
 difference()
 {
    union() {
+       
+     r = 30;
      translate([0,0,4])
-       //m2coupler_closed(30.5, 20);
-     female_coupler(31, 10, $fn=100);
+        male_coupler_with_shock_cord_attachment(od_threaded=r-1.0, 
+                    od_smooth=r,coupler_height=40, $fn=100);
+     color("red", 0.6)
+        female_coupler(r-0.5, 10, $fn=100);
+       
+     difference() {
+       color("blue", 0.6)
+        cylinder(25, r/2.0+5, r/2.0+5);
+        cylinder(25, r/2.0, r/2.0);
+     }
+       
    }
    cube([41,41,41]); 
 }

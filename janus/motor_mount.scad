@@ -48,7 +48,7 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
                 hcylinder(motor_tube_height-ring_height, w1, rocket_id/2.0);
             
             // motor mount
-            motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height,  fin_height, fin_slot_width, ring_height, add_thrust_stopper);
+            motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height,  fin_height, fin_slot_width, ring_height, add_thrust_stopper, motor_tube_height);
         }
         
         fin_slots(motor_tube_od, fin_height,fin_slot_width, motor_tube_height, ring_height, fin_slot_height);
@@ -60,7 +60,7 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
     color("purple", 0.75)
     translate([0,0,motor_tube_height-1])
     rotate([0,180,0])
-    female_coupler(rocket_id, coupler_height);  // ?-1
+    female_coupler(rocket_id-0.5, coupler_height);  // ?-1
     
     // launch lugs
     if (launch_lug_type>0)
@@ -110,18 +110,22 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
     
 }
 
-module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_height, fin_slot_width, ring_height, add_thrust_stopper)
+module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_height, fin_slot_width, ring_height, add_thrust_stopper, motor_tube_height)
 {
     // motor mount
-   
-
+   top_ring_heigth = motor_height * 0.15;
+   z = motor_height + ring_height - top_ring_heigth/2;
+   max_z = motor_tube_height - rocket_id/2; // below feaml coupler thread
+   top_ring_z = min(z, max_z);
+    
     difference() {
         union()
         {
             w2 = motor_tube_id / 2.0;
             translate([0,0,ring_height])
                 color("yellow", 0.6)
-                hcylinder(motor_height, motor_tube_od/2., w2);
+                //hcylinder(motor_height, motor_tube_od/2., w2);
+                hcylinder(motor_tube_height-ring_height, motor_tube_od/2., w2);
             
             if (add_thrust_stopper)
                 color("blue")
@@ -130,7 +134,7 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
             
             // thread for motor retainer
             thread_od = (rocket_id+motor_tube_od)/2.;
-            pitch = 1.5;
+            pitch = 2.0;
             color("blue")
             difference() {
                 threading(pitch = pitch, d=thread_od, windings=ring_height/pitch, full=true); 
@@ -156,10 +160,11 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
                 
                 translate([0, 0, ring_height])
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
-                translate([0, 0, motor_height/2.])
+                translate([0, 0, (motor_height+ring_height)/2.])
                     hcylinder(5, rocket_id/2.0, motor_tube_od/2.0);
-                translate([0, 0, motor_height+10])
-                    hcylinder(15, rocket_id/2.0, motor_tube_od/2.0);
+                
+                translate([0, 0, top_ring_z])
+                    hcylinder(top_ring_heigth, rocket_id/2.0, motor_tube_od/2.0);
                 
                 
             }
@@ -170,11 +175,10 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
         // so the top edge won't need to use supporters when printed
         // the engine mount should be printed upside-down
         //if (add_thrust_stopper)
-        translate([0,0,motor_height-rocket_id/2+5])
-        cylinder(rocket_id, 0, rocket_id/2);
+        //translate([0,0,top_ring_z-rocket_id+ top_ring_heigth+0.001])
+        //cylinder(rocket_id, 0, rocket_id/2);
         
-        //translate([0,0,motor_height-rocket_id/2+5])
-        //cube([100,100,100]);
+        
      }
    
 }
@@ -215,7 +219,7 @@ function polygon_slot(fin_slot_height,fin_slot_width) =
 [[-fin_slot_width/2.,0],[-fin_slot_width/3.,fin_slot_height],[fin_slot_width/3.,fin_slot_height],[fin_slot_width/2.,0] ];
 
 
-fin_motor_mount(rocket_od=55.52, rocket_id=50.47, motor_tube_od=35.42, motor_tube_id=32.2, motor_height=114, motor_tube_height=190, fin_slot_width=4.84211, fin_slot_height=10.05, fin_height=70, launch_lug_type=3, add_thrust_stopper=false, $fn = 100);
+fin_motor_mount(rocket_od=55.52, rocket_id=50.47, motor_tube_od=35.42, motor_tube_id=32.2, motor_height=140, motor_tube_height=190, fin_slot_width=4.84211, fin_slot_height=10.05, fin_height=140, launch_lug_type=3, add_thrust_stopper=false, $fn = 100);
 
 
 

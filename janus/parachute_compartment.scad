@@ -39,7 +39,7 @@ module parachute_compartment(compartment_height, body_id)
     coupler_height = body_id/4;
     translate([0,0,2])
     color("purple", 0.75)
-    female_coupler(body_id-0.0, coupler_height);
+    female_coupler(body_id-0.5, coupler_height);
     
 }
 

@@ -56,13 +56,13 @@ module extension_tube(compartment_height, body_id, motor_tube_id)
     coupler_height = body_id/4;
     color("purple", 0.75)
     translate([0,0,1])
-    female_coupler(body_id, coupler_height);
+    female_coupler(body_id-0.5, coupler_height);
 
     // threaded coupler top
     color("purple", 0.75)
     translate([0,0,compartment_height-1])
     rotate([0,180,0])
-    female_coupler(body_id, coupler_height);
+    female_coupler(body_id-0.5, coupler_height);
     
     // cord attachment
     holder_height = body_id;

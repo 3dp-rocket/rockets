@@ -44,8 +44,12 @@ C = 3;
 D = 4;
 E = 5;
 F = 6;
+D38 = 7;
 
 
+// fin types
+FIN_CLIPPED_DELTA=0;
+FIN_ELLIPSOID=1;
 
 //*********************************************
 // Set these variables.
@@ -53,6 +57,7 @@ model = F;  // a,A,B,C....F
 add_thrust_stopper = false;
 paper_tube_wall_thickness = 1.6; // mm
 motor_ring_height = 10.; // height of ring around composite motor (0 for estes, 10 aerotech)
+fin_type = FIN_CLIPPED_DELTA; // FIN_CLIPPED_DELTA or FIN_ELLIPSOID
 //*********************************************
 
 MOTOR_OD = 0;
@@ -63,9 +68,10 @@ rocket_parameters = [
     [ 13.3, 70.00],  // A
     [ 13.3, 70.00],  // B
     [ 18.0, 70.00],  // C*
-    [ 24.0, 70.00],  // D**
+    [ 24.0, 100.00],  // D**
     [ 29.0, 114.00],  // E
-    [ 29.0, 114.00]  // F
+    [ 29.0, 114.00],  // F
+    [ 38.37, 135,00] // 38mm  38+0.37 because that's the blue tube inner diameter!
     
 
 ];
@@ -92,7 +98,7 @@ fin_slot_height = (rocket_od-motor_tube_od)/2;
 
 body_height = min(7.5188 * motor_od ,printer_max_height);
 
-nose_tube_height = 6 * motor_od;
+nose_tube_height = min(6 * motor_od, printer_max_height);
 // add extra length to trimed from body_height exceedeing printer_max_height
 instrument_compartment_height = 70;
 
@@ -104,9 +110,7 @@ parachute_compartment_height = min(100 + 3*motor_od + (7.5188 * motor_od-body_he
 extension_tube_height = parachute_compartment_height; 
 
 
-pitch = 1.25;  // retainer screw pitch
-windings = 5;  // retainer screw windings
-
+pitch = 2.0; 
 
 retainer_male_od = (rocket_id + motor_tube_od) /2.0; // see motor_mount.scad
 
@@ -170,11 +174,11 @@ The variable 'part' can be specified to build (create STL's) for only a specific
 arrange()
     {
 
-        if (part=="retainer" || part=="all")
+        if (part=="retainer" || part=="all") {
             // 0.6 * motor_tube_id currenlty hardcode in motor mount
-            // pitch = 1.5 currentlry hardcoded in motor mount 
-
-            retainer_nut(rocket_od,retainer_male_od+0.5, motor_ring_height+0.6*motor_tube_id+2, pitch=1.5);  // bug: should be pitch = pitch but hardcoded in motor mount to be 1.5
+            //translate([0,0,27])
+            retainer_nut(rocket_od,retainer_male_od+0.5, motor_ring_height+0.6*motor_tube_id, pitch=pitch);  
+        }
 
 
         if (part=="motor_mount" || part=="all" || part == "fin") {
@@ -191,19 +195,20 @@ arrange()
                     translate([0,0,fin_length+20])
                     rotate([0,part == "all" ? 90 : 0,a+15])
                     translate([0,0,rocket_id])
-                    fin(fin_height, fin_length, fin_slot_width, fin_slot_height, fin_height*0.1, fin_type=0);
+                    fin(fin_height, fin_length, fin_slot_width, fin_slot_height, fin_height*0.1, fin_type=fin_type);
                 }
         }
     }
 
     if (part=="coupler1" || part == "all")
-        male_coupler_with_motor_tube_lock(rocket_id-0.5, motor_tube_id, coupler_height);
+            male_coupler_threaded(rocket_id-1.0, coupler_height);
+            //male_coupler_with_motor_tube_lock(rocket_id-1., motor_tube_id, coupler_height);
 
     if (part=="extension" || part=="all")
         extension_tube(parachute_compartment_height, rocket_id, motor_tube_id); 
 
     if (part=="coupler2" || part == "all")
-        male_coupler_threaded(rocket_id-0.5, coupler_height);
+        male_coupler_threaded(rocket_id-1.0, coupler_height);
 
     if (part=="parachute" || part=="all" || part == "piston") {
         if (part=="parachute" || part == "all")
@@ -214,14 +219,14 @@ arrange()
     }
 
     if (part=="coupler3" || part == "all")
-        male_coupler_with_shock_cord_attachment(od_threaded=rocket_id-0.5, od_smooth=rocket_id, coupler_height=coupler_height*1.5);
+        male_coupler_with_shock_cord_attachment(od_threaded=rocket_id-1.0, od_smooth=rocket_id, coupler_height=coupler_height*1.5);
 
     if (part=="instrument" || part=="all") {
             instrument_compartment(instrument_compartment_height, rocket_id, vent_hole_od);
      }
 
     if (part=="coupler4" || part == "all")
-        male_coupler_threaded(rocket_id-0.5, coupler_height);
+        male_coupler_threaded(rocket_id-1.0, coupler_height);
  
        if (part=="nose" || part == "all")
            rocket_nose(h=nose_tube_height, body_id=rocket_id);

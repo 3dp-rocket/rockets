@@ -28,11 +28,13 @@ use <Threading.scad>    // https://www.thingiverse.com/thing:1659079
 module retainer_nut(od,id, height, pitch) {
     union() {
            
-           windings = height/pitch;
-           translate([0,0,2])
+           windings = (height+pitch)/pitch;
+           translate([0,0,height+2])
+            rotate([0,180,0])
             Threading(pitch = pitch, D=od, d=id, windings=windings,  $fn=100); 
+        
            difference() {
-               cylinder(3, od/2.,od/2., $fn=100); //base
+               cylinder(2, od/2.,od/2., $fn=100); //base
                translate([0,0,-.1])
                cylinder(4.0, id*.3, id*.3); // hole in base
            }
@@ -41,4 +43,4 @@ module retainer_nut(od,id, height, pitch) {
     
 }
 
-retainer_nut(50, 40, 20, 1.5);
+retainer_nut(50, 40, 20, 2.0);
