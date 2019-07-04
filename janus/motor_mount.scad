@@ -75,7 +75,7 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
         
             rotate([0,0,60+15])
             {
-                lug_x = 0.99*(rocket_id)/2 + lug_od/2 + rocket_wall_width + block_width/2;
+                lug_x = (rocket_id)/2 + lug_od/2 + rocket_wall_width -0.01;//+ block_width/2;
                 translate([lug_x,0,ring_height + lug_length/2 ])
                 {
                     lug(lug_od, lug_id, lug_length, block_width);

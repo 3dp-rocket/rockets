@@ -31,49 +31,75 @@ SOFTWARE.
 
 
 // diameter of instrument bay
-bay_id = 65.16;
+bay_id = 54.2;
 
 // altimeter dimensions  14.5 x 18 x 49
 altimeter_w = 15;
 altimeter_d = 18.5;
-altimeter_h = 45;
+altimeter_h = 55;
 
 // wall thickness
 wall = 2;
 
 
-// draw the box that holds the altimeter
-difference() {
-    cube([altimeter_w+wall, altimeter_d+wall, altimeter_h], center=true);
-    cube([altimeter_w, altimeter_d, altimeter_h+1], center=true);
+translate([0,0,altimeter_h/2])
+{
+    // draw the box that holds the altimeter
+    difference() {
+        cube([altimeter_w+wall, altimeter_d+wall, altimeter_h], center=true);
+        cube([altimeter_w, altimeter_d, altimeter_h+1], center=true);
+    }
+
+    // draw arms that reach to the outer edge of the bay
+    difference() {
+        union () {
+            cube([bay_id, wall ,altimeter_h], center=true);
+            cube([wall, bay_id, altimeter_h], center=true);
+        }
+        cube([altimeter_w, altimeter_d, altimeter_h+1], center=true);
+        
+        // make slits
+        for(x=[altimeter_w:2*wall:bay_id/2]) {
+            translate([x-wall,0,0])
+            cube([wall, wall+1, altimeter_h-4*wall], center=true);
+            translate([-x+wall,0,0])
+            cube([wall, wall+1, altimeter_h-4*wall], center=true);
+        }
+
+        // make slits
+        for(x=[altimeter_d:2*wall:bay_id/2]) {
+            translate([0,x-wall, 0])
+            cube([wall+1, wall, altimeter_h-4*wall], center=true);
+            translate([0,-x+wall, 0])
+            #cube([wall+1, wall, altimeter_h-4*wall], center=true);
+        }
+    }
+
 }
 
-// draw arms that reach to the outer edge of the bay
-difference() {
-    union () {
-        cube([bay_id, wall ,altimeter_h], center=true);
-        cube([wall, bay_id, altimeter_h], center=true);
-    }
-    cube([altimeter_w, altimeter_d, altimeter_h+1], center=true);
-    
-    // make slits
-    for(x=[altimeter_w:2*wall:bay_id/2]) {
-        translate([x-wall,0,0])
-        cube([wall, wall+1, altimeter_h-4*wall], center=true);
-        translate([-x+wall,0,0])
-        cube([wall, wall+1, altimeter_h-4*wall], center=true);
-    }
+bigredbee_id = 22;
+bigredbee_h = 40;
+shoulder_h = 10;
 
-    // make slits
-    for(x=[altimeter_d:2*wall:bay_id/2]) {
-        translate([0,x-wall, 0])
-        cube([wall+1, wall, altimeter_h-4*wall], center=true);
-        translate([0,-x+wall, 0])
-        #cube([wall+1, wall, altimeter_h-4*wall], center=true);
+translate([100,0, shoulder_h/2])
+{
+    color("blue")
+    difference() {
+        cube([altimeter_w, altimeter_d, 10], center=true);
+        cube([altimeter_w-wall, altimeter_d-wall, 10+1], center=true);
     }
-
-
 }
+
+translate([100,0,shoulder_h+bigredbee_h/2])
+{
+    color("red")
+    difference() {
+        cube([bigredbee_id+wall, bigredbee_id+wall, bigredbee_h], center=true);
+        translate([0,0,1])
+        cube([bigredbee_id, bigredbee_id, bigredbee_h+1], center=true);
+    }
+}
+
 
 
 

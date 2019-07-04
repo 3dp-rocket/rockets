@@ -53,9 +53,9 @@ FIN_ELLIPSOID=1;
 
 //*********************************************
 // Set these variables.
-model = F;  // a,A,B,C....F
+model = D38;  // a,A,B,C....F
 add_thrust_stopper = false;
-paper_tube_wall_thickness = 1.6; // mm
+paper_tube_wall_thickness = 1.6; //0.4; //1.6; // mm  blue tube = 1.6
 motor_ring_height = 10.; // height of ring around composite motor (0 for estes, 10 aerotech)
 fin_type = FIN_CLIPPED_DELTA; // FIN_CLIPPED_DELTA or FIN_ELLIPSOID
 //*********************************************
@@ -171,12 +171,13 @@ Arrange() creates an exploded view of all parts. It uses layers[] to calculate t
 The variable 'part' can be specified to build (create STL's) for only a specific set of parts. See batch.sh for examples. 
 
 */
+//difference() {
 arrange()
     {
 
         if (part=="retainer" || part=="all") {
             // 0.6 * motor_tube_id currenlty hardcode in motor mount
-            //translate([0,0,27])
+            //translate([0,0,26.7])
             retainer_nut(rocket_od,retainer_male_od+0.5, motor_ring_height+0.6*motor_tube_id, pitch=pitch);  
         }
 
@@ -219,7 +220,7 @@ arrange()
     }
 
     if (part=="coupler3" || part == "all")
-        male_coupler_with_shock_cord_attachment(od_threaded=rocket_id-1.0, od_smooth=rocket_id, coupler_height=coupler_height*1.5);
+        male_coupler_with_shock_cord_attachment(od_threaded=rocket_id-1.0, od_smooth=rocket_id, thread_height=coupler_height/2.0, shoulder_heigth=rocket_id/2.0);
 
     if (part=="instrument" || part=="all") {
             instrument_compartment(instrument_compartment_height, rocket_id, vent_hole_od);
@@ -235,5 +236,6 @@ arrange()
     }
 
 
-
-
+//    translate([0,0,27])
+//    cube([40,40,27]);
+//}

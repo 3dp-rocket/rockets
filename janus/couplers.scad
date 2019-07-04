@@ -118,7 +118,7 @@ module m2coupler(od, coupler_height)
  
 }
 
-module male_coupler_with_shock_cord_attachment(od_threaded, od_smooth, coupler_height)
+module male_coupler_with_shock_cord_attachment(od_threaded, od_smooth, thread_height, shoulder_heigth)
 {
     // coupler
     wall_thickness = 0.075 * od_threaded;
@@ -128,26 +128,29 @@ module male_coupler_with_shock_cord_attachment(od_threaded, od_smooth, coupler_h
         translate([0,0,0])   
         union() {
             pitch=2;
-            threading(pitch = pitch, d=2*w1, windings=(coupler_height/pitch)/3, full=true); 
-            translate([0,0,coupler_height/3])   
-            cylinder(2*coupler_height/3, od_smooth/2, od_smooth/2);
+            threading(pitch = pitch, d=2*w1, windings=(thread_height/pitch), full=true); 
+            color("blue",0.6)
+            translate([0,0,thread_height])   
+            cylinder(shoulder_heigth, od_smooth/2, od_smooth/2);
         }
         w2 = w1 - wall_thickness;
         translate([0,0,-.1])
-        cylinder(coupler_height+3, w2, w2);
+        cylinder(2*shoulder_heigth+3, w2, w2);
     }
  
     // cap
+    cap_height = 5;
     translate([0,0,0])   
-        cylinder(5, w1-wall_thickness+.1, w1-wall_thickness+.1);
+        cylinder(cap_height, w1-wall_thickness+.1, w1-wall_thickness+.1);
     
     difference() {
         // cord mount
-        mh = coupler_height;
+        mh = thread_height;
         translate([0,0,mh/2])
-        cube([od_smooth/4.,od_smooth-wall_thickness,mh], center=true);
-        for(d = [5,-5]) {
-            translate([-od_smooth/2,d,2.*coupler_height/3.])
+        #cube([od_threaded/4.,od_threaded-2*wall_thickness,mh], center=true);
+        
+        for(d = [od_threaded/4,-od_threaded/4]) {
+            translate([-od_smooth/2,d,cap_height+ 2*2.5])
             rotate([0,90,0])
                 cylinder(od_smooth,2.5,2.5);
         }
@@ -199,11 +202,12 @@ difference()
 {
    union() {
        
-     r = 30;
+     r = 40;
      translate([0,0,4])
         male_coupler_with_shock_cord_attachment(od_threaded=r-1.0, 
-                    od_smooth=r,coupler_height=40, $fn=100);
-     color("red", 0.6)
+                    od_smooth=r,thread_height=30, shoulder_heigth=30, $fn=100);
+     /*
+       color("red", 0.6)
         female_coupler(r-0.5, 10, $fn=100);
        
      difference() {
@@ -211,15 +215,16 @@ difference()
         cylinder(25, r/2.0+5, r/2.0+5);
         cylinder(25, r/2.0, r/2.0);
      }
+       */
        
    }
    cube([41,41,41]); 
 }
     
-translate([100,0,0])
-    male_coupler_with_motor_tube_lock(50, 29, 20, $fn=100);
+//translate([100,0,0])
+//    male_coupler_with_motor_tube_lock(50, 29, 20, $fn=100);
 
 translate([200,0,0])
-    male_coupler_with_shock_cord_attachment(od_threaded=40.5, od_smooth=40,coupler_height=40, $fn=100);
+    male_coupler_with_shock_cord_attachment(od_threaded=40.5, od_smooth=40,thread_height=30, shoulder_heigth=30, $fn=100);
 
 
