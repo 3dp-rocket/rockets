@@ -75,8 +75,37 @@ module male_coupler_threaded(od, coupler_height)
         cylinder(coupler_height+3, w2, w2);
 
     }
+    
  
 }
+
+module male_coupler_with_hook(od, coupler_height)
+{
+    // coupler
+    wall_thickness = 0.075 * od;
+    w1 = od/2;
+    difference() {
+        translate([0,0,0])   
+        threading(pitch = 2, d=2*w1, windings=coupler_height/2, full=true); 
+
+        w2 = w1 - wall_thickness;
+        translate([0,0,-.1])
+        cylinder(coupler_height+3, w2, w2);
+
+    }
+    
+    difference() {
+        sh = coupler_height/2.;
+        translate([0,0, sh/2.])
+        cube([od-wall_thickness-0.3, w1*0.3,sh], center=true);
+        for(h=[0,2,3]) {
+            translate([od/4-h*od/4,0, sh/2.])
+            rotate([90,0,0])
+                cylinder(10,2,2, center=true,$fn=100);
+        }
+    }
+}
+
 
 module mcoupler_closed(od, coupler_height)
 {
@@ -145,7 +174,7 @@ module male_coupler_with_shock_cord_attachment(od_threaded, od_smooth, thread_he
     
     difference() {
         // cord mount
-        mh = thread_height;
+        mh = max(thread_height,20);
         translate([0,0,mh/2])
         #cube([od_threaded/4.,od_threaded-2*wall_thickness,mh], center=true);
         
@@ -198,6 +227,76 @@ module male_coupler_with_motor_tube_lock(od, motor_tube_od, coupler_height)
 }
 
 
+module male_coupler_with_test_charge(od, coupler_height)
+{
+    // coupler
+    wall_thickness = 0.075 * od;
+    w1 = od/2;
+    difference() {
+        translate([0,0,0])   
+        threading(pitch = 2, d=2*w1, windings=coupler_height/2, full=true); 
+
+        w2 = w1 - wall_thickness;
+        translate([0,0,-.1])
+        cylinder(coupler_height+3, w2, w2);
+
+    }
+
+    difference() {
+        cylinder(10, w1+2,w1+2, $fn=12);
+
+        // holes for screws for electric contacts
+        translate([w1/2+2,0,-1])
+            cylinder(60, d1=2.,d2=2., $fn=100);
+        // holes for screws for electric contacts
+        translate([-w1/2-2.,0,-1])
+            cylinder(60, d1=2.,d2=2., $fn=100);
+    
+    
+    }
+    
+    difference() {
+        cylinder(coupler_height, 10, 10, $fn=100);
+        translate([0,0, coupler_height-15+0.001])
+            cylinder(15, d1=12.6,d2=12.6, $fn=100);
+        translate([0,0, coupler_height-20+0.002])
+             cylinder(5, d1=0,d2=12.6, $fn=100);
+        
+    }
+    
+
+    
+    //Threading(pitch = 2., d=20.0, windings=10); 
+    /*
+    difference() {
+        cylinder(10, w1+2,w1+2, $fn=12);
+        translate([0,0,-.1])
+        cylinder(60, d1=20.,d2=20.);
+
+        // holes for screws for electric contacts
+        translate([w1/2+2,0,-1])
+            cylinder(60, d1=2.,d2=2., $fn=100);
+        // holes for screws for electric contacts
+        translate([-w1/2-2.,0,-1])
+            cylinder(60, d1=2.,d2=2., $fn=100);
+        
+        cylinder(60, d1=20.,d2=20.);
+    }
+    */
+    
+    // powder compartment screw
+    //translate([0,0, 100])
+    //    difference() {
+    //        threading(pitch = 2, d=20-0.5, windings=coupler_height/2, full=true); 
+    //        translate([0,0, -1])
+    //            #cylinder(20, d1=12.6,d2=12.6, $fn=100);
+    //    }
+
+    
+}
+
+
+
 difference()
 {
    union() {
@@ -225,6 +324,7 @@ difference()
 //    male_coupler_with_motor_tube_lock(50, 29, 20, $fn=100);
 
 translate([200,0,0])
-    male_coupler_with_shock_cord_attachment(od_threaded=40.5, od_smooth=40,thread_height=30, shoulder_heigth=30, $fn=100);
+    male_coupler_with_shock_cord_attachment(od_threaded=20.5, od_smooth=20,thread_height=20, shoulder_heigth=20, $fn=100);
 
-
+translate([0,200,0])
+male_coupler_with_test_charge(60, 60);

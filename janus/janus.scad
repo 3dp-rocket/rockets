@@ -46,6 +46,9 @@ E = 5;
 F = 6;
 D38 = 7;
 
+// Paper tube liner thickness
+BLUE_TUBE_THICKNESS = 1.6;   // https://alwaysreadyrocketry.com/?product=1-15-29mm-x-062-wall-x-48-airframe-mmt
+STD_TUB_THICKNESS = 0.4;
 
 // fin types
 FIN_CLIPPED_DELTA=0;
@@ -54,8 +57,8 @@ FIN_ELLIPSOID=1;
 //*********************************************
 // Set these variables.
 model = D38;  // a,A,B,C....F
-add_thrust_stopper = false;
-paper_tube_wall_thickness = 1.6; //0.4; //1.6; // mm  blue tube = 1.6
+add_thrust_stopper = model < F ? true : false;
+paper_tube_wall_thickness = BLUE_TUBE_THICKNESS; //STD_TUB_THICKNESS,BLUE_TUBE_THICKNESS
 motor_ring_height = 10.; // height of ring around composite motor (0 for estes, 10 aerotech)
 fin_type = FIN_CLIPPED_DELTA; // FIN_CLIPPED_DELTA or FIN_ELLIPSOID
 //*********************************************
@@ -100,7 +103,7 @@ body_height = min(7.5188 * motor_od ,printer_max_height);
 
 nose_tube_height = min(6 * motor_od, printer_max_height);
 // add extra length to trimed from body_height exceedeing printer_max_height
-instrument_compartment_height = 70;
+instrument_compartment_height = rocket_id * 1.4; //70
 
 //http://www.perfectflite.com/Downloads/StratoLoggerCF%20manual.pdf
 vent_hole_od = instrument_compartment_height * rocket_id* .00037;
@@ -109,10 +112,12 @@ parachute_compartment_height = min(100 + 3*motor_od + (7.5188 * motor_od-body_he
 
 extension_tube_height = parachute_compartment_height; 
 
+shoulder_height= (model==D38)? 30 : 0;
 
 pitch = 2.0; 
 
 retainer_male_od = (rocket_id + motor_tube_od) /2.0; // see motor_mount.scad
+motor_retainer_height = motor_ring_height + (add_thrust_stopper?2:0.6*motor_tube_id);
 
 
 LUG_ROD_1_8 = 1;
@@ -141,6 +146,7 @@ echo("fin slot height  :", fin_slot_height);
 
 
 echo("parachute_compartment_height:", parachute_compartment_height);
+echo("instrument_compartment_height:", instrument_compartment_height);
 
 echo("nose cone total height", nose_tube_height);
 echo("nose cone height", nose_tube_height * 2/3);
@@ -178,7 +184,7 @@ arrange()
         if (part=="retainer" || part=="all") {
             // 0.6 * motor_tube_id currenlty hardcode in motor mount
             //translate([0,0,26.7])
-            retainer_nut(rocket_od,retainer_male_od+0.5, motor_ring_height+0.6*motor_tube_id, pitch=pitch);  
+            retainer_nut(rocket_od,retainer_male_od+0.5, motor_retainer_height, pitch=pitch);  
         }
 
 
@@ -202,7 +208,8 @@ arrange()
     }
 
     if (part=="coupler1" || part == "all")
-            male_coupler_threaded(rocket_id-1.0, coupler_height);
+            //male_coupler_threaded(rocket_id-1.0, coupler_height);
+            male_coupler_with_hook(rocket_id-1.0, coupler_height);
             //male_coupler_with_motor_tube_lock(rocket_id-1., motor_tube_id, coupler_height);
 
     if (part=="extension" || part=="all")
@@ -211,12 +218,25 @@ arrange()
     if (part=="coupler2" || part == "all")
         male_coupler_threaded(rocket_id-1.0, coupler_height);
 
-    if (part=="parachute" || part=="all" || part == "piston") {
-        if (part=="parachute" || part == "all")
-            parachute_compartment(parachute_compartment_height, rocket_id);
+    if (part=="parachute" || part=="all" || part == "piston" || part=="parachute_extension" || part == "parachute_middle_extension") {
+        if (part=="parachute" || part == "all") {
+            parachute_compartment(total_height=parachute_compartment_height, body_id =rocket_id, shoulder_height=shoulder_height);
+        }
+        if ((part=="parachute_extension" || part == "all") && shoulder_height>0) {    
+            translate([rocket_id,-rocket_id,0])
+            parachute_compartment_extension(total_height=parachute_compartment_height, body_id =rocket_id, shoulder_height=shoulder_height);
+        }
+        if ((part=="parachute_middle_extension" || part == "all") && shoulder_height>0) {    
+            translate([-rocket_id,+rocket_id,0])
+            parachute_compartment_middle_extension(total_height=parachute_compartment_height, body_id =rocket_id, shoulder_height=shoulder_height);
+        }
+        
         if (part=="piston" || part == "all")
-            translate([rocket_id,rocket_id,0])
-                piston(rocket_id);
+            translate([rocket_id,rocket_id,0]) {
+                piston_with_screw(rocket_id);
+                translate([2*rocket_id,rocket_id,0])
+                thread_lock_screw(rocket_id);
+            }
     }
 
     if (part=="coupler3" || part == "all")
@@ -235,6 +255,10 @@ arrange()
        
     }
 
+    
+    if (part=="male_coupler_with_test_charge")
+        male_coupler_with_test_charge(rocket_id-1.0, coupler_height);
+    
 
 //    translate([0,0,27])
 //    cube([40,40,27]);

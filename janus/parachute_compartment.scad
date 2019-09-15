@@ -22,15 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 use <couplers.scad>
+use <hcylinder.scad>
 
-module parachute_compartment(compartment_height, body_id)
+module shoulder(height, w1, w2) {
+    color("red")
+    {
+        hcylinder(height, w1, w2);
+    }
+
+}
+
+module parachute_compartment(total_height, body_id, shoulder_height=0)
 {
     wall_thickness = body_id * 0.05;
     w1 = body_id/2 + wall_thickness;
     w2 = body_id/2;
+    compartment_height = total_height-shoulder_height;
     
     difference() {
-        cylinder(compartment_height, w1, w1);
+        union() {
+            cylinder(compartment_height, w1, w1);
+            if (shoulder_height > 0) {
+                translate([0,0,compartment_height])
+                    //shoulder(shoulder_height, (w1+w2)/2., w2);
+                    shoulder(shoulder_height, w1, (w1+w2)/2.);
+            }
+        }
         translate([0,0,-0.01])
         cylinder(compartment_height+0.1, w2, w2);
     }
@@ -41,7 +58,68 @@ module parachute_compartment(compartment_height, body_id)
     color("purple", 0.75)
     female_coupler(body_id-0.5, coupler_height);
     
+    
 }
 
+module parachute_compartment_extension(total_height, body_id, shoulder_height=0)
+{
+    wall_thickness = body_id * 0.05;
+    w1 = body_id/2 + wall_thickness;
+    w2 = body_id/2;
+    compartment_height = total_height-shoulder_height;
     
-parachute_compartment(200, 50, $fn=100);
+    difference() {
+        union() {
+            cylinder(compartment_height, w1, w1);
+            if (shoulder_height > 0) {
+                translate([0,0,compartment_height])
+                    //shoulder(shoulder_height, w1, (w1+w2)/2.);
+                    shoulder(shoulder_height, (w1+w2)/2., w2);
+            }
+        }
+        translate([0,0,-0.01])
+        cylinder(compartment_height+0.1, w2, w2);
+    }
+
+    // shoulder
+    
+}
+
+module parachute_compartment_middle_extension(total_height, body_id, shoulder_height=0)
+{
+    wall_thickness = body_id * 0.05;
+    w1 = body_id/2 + wall_thickness;
+    w2 = body_id/2;
+    compartment_height = total_height-2*shoulder_height;
+    
+    difference() {
+        union() {
+            translate([0,0,shoulder_height])
+                cylinder(compartment_height, w1, w1);
+            if (shoulder_height > 0) {
+                translate([0,0,compartment_height+shoulder_height])
+                    //shoulder(shoulder_height, w1, (w1+w2)/2.);
+                    shoulder(shoulder_height, (w1+w2)/2., w2);
+            }
+            if (shoulder_height > 0) {
+                translate([0,0,0])
+                    //shoulder(shoulder_height, (w1+w2)/2., w2);
+                    shoulder(shoulder_height, w1, (w1+w2)/2.);
+            }
+        }
+        translate([0,0,-0.01])
+        cylinder(compartment_height+shoulder_height+0.1, w2, w2);
+    }
+
+    // shoulder
+    
+}
+    
+shoulder_height = 30;
+parachute_compartment(200, 50, shoulder_height=shoulder_height, $fn=100);
+
+translate([0,0,250])
+    parachute_compartment_extension(200, 50, shoulder_height=shoulder_height, $fn=100);
+
+translate([0,0,500])
+    parachute_compartment_middle_extension(200, 50, shoulder_height=shoulder_height, $fn=100);
