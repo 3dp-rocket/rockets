@@ -44,6 +44,7 @@ C = 3;
 D = 4;
 E = 5;
 F = 6;
+D29 = 6;  // same as F - legacy convention
 D38 = 7;
 
 // Paper tube liner thickness
@@ -60,7 +61,7 @@ model = D38;  // a,A,B,C....F
 add_thrust_stopper = model < F ? true : false;
 paper_tube_wall_thickness = BLUE_TUBE_THICKNESS; //STD_TUB_THICKNESS,BLUE_TUBE_THICKNESS
 motor_ring_height = 10.; // height of ring around composite motor (0 for estes, 10 aerotech)
-fin_type = FIN_CLIPPED_DELTA; // FIN_CLIPPED_DELTA or FIN_ELLIPSOID
+fin_type = FIN_ELLIPSOID; // FIN_CLIPPED_DELTA or FIN_ELLIPSOID
 //*********************************************
 
 MOTOR_OD = 0;

@@ -54,7 +54,8 @@ module piston(od)
     }
 }
 
-
+// designed for this cord:
+// https://the-rocketman.com/kevlar-nylon-shock-cords/
 module piston_with_screw(od)
 {
     thread_size = .1 * od;
@@ -96,7 +97,7 @@ module thread_lock_screw(od)
         union() {
             cylinder(4, 2*thread_size, 2*thread_size, $fn=12);
             cylinder(22, 0.8*thread_size, 0.8*thread_size, $fn=100);
-            threading(pitch = 2., d=2.*thread_size, windings=10); 
+            threading(pitch = 2., d=2.*thread_size-0.2, windings=10); 
         }
         translate([0,5,0])
         cube([2,thread_size+10,100], center=true);
