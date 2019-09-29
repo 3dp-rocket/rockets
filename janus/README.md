@@ -19,7 +19,7 @@ Tested with engines:
   * Aerotech H-182R-14A and H-115  (9 seconds delay)
   
 * 38mm version:
-  * Aerotech DMS I500 (12 secoond delay) - Altitude 4950 ft.
+  * Aerotech DMS I500 (12 second delay) - Altitude 4950 ft.
 
 <img src="janus.png" width=400>
 
