@@ -7,13 +7,19 @@ The script for making threads (screws) was copied from [thingiverse](http://www.
 [OpenRocket Model](./OpenRocket-29mm.pdf)
 
 Other parts:
-* [Kevlar shock cord](https://www.amazon.com/gp/product/B00OVI9XE6/) or similar.
+* [Kevlar shock cord](https://the-rocketman.com/kevlar-nylon-shock-cords/) or similar.
+* [Kevlar cord](https://www.amazon.com/gp/product/B00OVI9XE6/) to attach shock cord to frame.
 * [Blue tube (used as motor tube liner for heat insulation)](https://www.alwaysreadyrocketry.com/) or similar.
-* Parachute (18" dia minimum)
+* [Parachute](https://topflightrecoveryllc.homestead.com/page1.html) - Use a [calculator](https://www.rocketreviews.com/parachute-size-calculator.html) to determine proper size.
 
 Tested with engines:
-* Aeroetch G-80
-* Aerotech H-182R-14A and H-115  (9 seconds delay)
+
+* 29mm version:
+  * Aeroetch G-80
+  * Aerotech H-182R-14A and H-115  (9 seconds delay)
+  
+* 38mm version:
+  * Aerotech DMS I500 (12 secoond delay) - Altitude 4950 ft.
 
 <img src="janus.png" width=400>
 
