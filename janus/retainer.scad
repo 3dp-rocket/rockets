@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 1019 Jose D. Saura
+Copyright (c) 2019 Jose D. Saura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,16 +27,16 @@ use <Threading.scad>    // https://www.thingiverse.com/thing:1659079
 
 module retainer_nut(od,id, height, pitch) {
     union() {
-           
+           base_height = 4;
            windings = (height+pitch)/pitch;
-           translate([0,0,height+2])
+           translate([0,0,height+base_height])
             rotate([0,180,0])
-            Threading(pitch = pitch, D=od, d=id, windings=windings,  $fn=100); 
+            Threading(pitch = pitch, D=od, d=id, windings=windings, steps=80, $fn=100); 
         
            difference() {
-               cylinder(2, od/2.,od/2., $fn=100); //base
+               cylinder(base_height, od/2.,od/2., $fn=100); //base
                translate([0,0,-.1])
-               cylinder(4.0, id*.3, id*.3); // hole in base
+               cylinder(base_height+1.0, id*.3, id*.3); // hole in base
            }
 
     }

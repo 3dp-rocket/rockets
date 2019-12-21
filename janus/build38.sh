@@ -7,6 +7,7 @@ openscad-nightly -D 'part="parachute_extension"' -D 'model=7' -o stl/38mm/parach
 openscad-nightly -D 'part="parachute_middle_extension"' -D 'model=7' -o stl/38mm/parachute_middle_extension.stl janus.scad
 
 openscad-nightly -D 'part="piston"' -D 'model=7' -o stl/38mm/piston.stl janus.scad  
+openscad-nightly -D 'part="piston_screw"' -D 'model=7' -o stl/38mm/piston_screw.stl janus.scad  
 openscad-nightly -D 'part="extension"' -D 'model=7' -o stl/38mm/extension.stl janus.scad
 openscad-nightly -D 'part="instrument"' -D 'model=7'  -o stl/38mm/instrument.stl janus.scad 
 openscad-nightly -D 'part="nose"' -D 'model=7' -o stl/38mm/nose.stl janus.scad

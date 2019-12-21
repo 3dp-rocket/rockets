@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 1019 Jose D. Saura
+Copyright (c) 2019 Jose D. Saura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -59,13 +59,15 @@ module piston(od)
 module piston_with_screw(od)
 {
     thread_size = .1 * od;
+    w1 = od/2; // -0.1 to ensure it rides smoothly
+    echo("piston OD", 2*w1);
+
     difference()
     {
         union() {
             piston_height = od*.75;
             
             wall_thickness = 0.05 * od;
-            w1 = od/2-0.1; // -0.1 to ensure it rides smoothly
             difference() {
                 cylinder(piston_height, w1, w1);
                 
@@ -75,11 +77,17 @@ module piston_with_screw(od)
             }
         
             cylinder(2*wall_thickness, w1, w1);
-            
         }
         
         translate([0,0,-.1])
-        cylinder(100, thread_size, thread_size);
+            cylinder(100, thread_size, thread_size);
+
+        // groove for seal
+        //translate([0,0,5])
+        //rotate_extrude() {
+        //    translate([w1+.2,0,0])
+        //        circle(0.5);
+        //}
 
         
     }
@@ -97,7 +105,7 @@ module thread_lock_screw(od)
         union() {
             cylinder(4, 2*thread_size, 2*thread_size, $fn=12);
             cylinder(22, 0.8*thread_size, 0.8*thread_size, $fn=100);
-            threading(pitch = 2., d=2.*thread_size-0.2, windings=10); 
+            threading(pitch = 2., d=2.*thread_size-0.5, windings=10); 
         }
         translate([0,5,0])
         cube([2,thread_size+10,100], center=true);
@@ -110,7 +118,9 @@ module thread_lock_screw(od)
 
 
 piston_with_screw(65, $fn=100);
+//translate([65/2,0,5])
+//color("red") cube(1);
 
-translate([100,0,0])
-thread_lock_screw(65);
+//translate([100,0,0])
+//thread_lock_screw(65);
 

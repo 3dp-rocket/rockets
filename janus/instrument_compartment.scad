@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 1019 Jose D. Saura
+Copyright (c) 2019 Jose D. Saura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,13 +29,10 @@ SOFTWARE.
 
 use <couplers.scad>
 
-module instrument_compartment(instrument_box_height, body_id, vent_hole_od)
+module instrument_compartment(instrument_box_height, rocket_od, body_id, vent_hole_od, coupler_height)
 {
-    wall_thickness = body_id * 0.05;
-    w1 = body_id/2 + wall_thickness;
-    w2 = body_id/2;
-    
-    
+    w1 = rocket_od/2.;
+    w2 = body_id/2.;
     
     difference() {
         cylinder(instrument_box_height, w1, w1);
@@ -50,7 +47,6 @@ module instrument_compartment(instrument_box_height, body_id, vent_hole_od)
     }
     
     // threaded coupler bottom
-    coupler_height = body_id/4.0;
     color("purple", 0.75)
     translate([0,0,2])
     female_coupler(body_id-0.5, coupler_height);
@@ -79,4 +75,4 @@ module instrument_compartment_cap(od)
     
 }
 
-instrument_compartment(70,50, 0.1, $fn=100);
+instrument_compartment(70, , 50*1.1, 50, 0.1, coupler_height=30, $fn=100);

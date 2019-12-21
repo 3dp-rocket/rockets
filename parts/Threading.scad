@@ -35,7 +35,7 @@ example(showexample)
 // #9 M8 hex nut
    Threading(D=14.6, pitch = 1.25, d=8, windings=5, full=true, $fn=6);  
 // #10 M8 four socket nut
-   Threading(D=16, pitch = 1.25, d=8, windings=5, full=true, $fn=4);  
+   Threading(D=16, pitch = 1.25, d=8, windings=5, $fn=4);  
 }
 
 module example(number=0) if(number) children(number-1);
@@ -60,7 +60,7 @@ module help()
 
 //Threading(R=12, pitch = pitch, r=radius, windings= windings, angle = angle); 
 
-module Threading(D = 0, pitch = 1, d = 12, windings = 10, helices = 1, angle = 60, steps=40)
+module Threading(D = 0, pitch = 1, d = 12, windings = 10, helices = 1, angle = 60, steps=80)
 {
   R = D==0?d/2+2*pitch/PI:D/2; 
   translate([0,0,-pitch])
@@ -72,7 +72,7 @@ module Threading(D = 0, pitch = 1, d = 12, windings = 10, helices = 1, angle = 6
   }
 }
 
-module threading(pitch = 1, d = 12, windings = 10, helices = 1, angle = 60, steps=40, full = false)
+module threading(pitch = 1, d = 12, windings = 10, helices = 1, angle = 60, steps=80, full = false)
 {  // tricky: glue two 180° pieces together to get a proper manifold  
   r = d/2;
   Steps = steps/2; 

@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 1019 Jose D. Saura
+Copyright (c) 2019 Jose D. Saura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,12 +39,11 @@ SOFTWARE.
 use <couplers.scad>
 
 
-module extension_tube(compartment_height, body_id, motor_tube_id)
+module extension_tube(compartment_height, rocket_od, body_id, motor_tube_id, coupler_height)
 {
     
-    wall_thickness = body_id * 0.05;
-    w1 = body_id/2 + wall_thickness;
-    w2 = body_id/2;
+    w1 = rocket_od/2.;
+    w2 = body_id/2.;
     
     difference() {
         cylinder(compartment_height, w1, w1);
@@ -53,7 +52,7 @@ module extension_tube(compartment_height, body_id, motor_tube_id)
 
     }
     // threaded coupler bottom
-    coupler_height = body_id/4;
+    //coupler_height = body_id/4;
     color("purple", 0.75)
     translate([0,0,1])
     female_coupler(body_id-0.5, coupler_height);
@@ -73,11 +72,12 @@ module extension_tube(compartment_height, body_id, motor_tube_id)
             cylinder(holder_height,body_id/2.,body_id/2.);
             
             // hole for motor tube
-            cylinder(holder_height+1,motor_tube_id/2, motor_tube_id/2);
+            color("cyan")
+            cylinder(holder_height+1,motor_tube_id/2., motor_tube_id/2.); // @ +.15
             
             // taper so we don neet to use supports
             translate([0,0,-0.01])
-                cylinder(holder_height*.75,body_id/2.,motor_tube_id/2);
+                cylinder(holder_height*.75,body_id/2.,motor_tube_id/2.);
             
             // holes for cord
             hole_id = 1.5;
@@ -97,4 +97,4 @@ module extension_tube(compartment_height, body_id, motor_tube_id)
 }
 
 
-extension_tube(compartment_height=200, body_id=50, motor_tube_id=30, $fn=100);
+extension_tube(compartment_height=200, rocket_od=50*1.1,body_id=50, motor_tube_id=30, coupler_height=30, $fn=100);

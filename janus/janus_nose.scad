@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 1019 Jose D. Saura
+Copyright (c) 2019 Jose D. Saura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,17 @@ SOFTWARE.
 use <../parts/nose.scad>
 use <couplers.scad>
 
-module rocket_nose(h, body_id) {
+module rocket_nose(h, rocket_od, body_id, coupler_height) {
     
-    wall_thickness = body_id * 0.05;
-    w1 = body_id/2 + wall_thickness;
-    w2 = body_id/2;
+    w1 = rocket_od/2.;
+    w2 = body_id/2.;
     
     // straight section serves as base of cone an coupling
-    cone_base = h/3;
+    cone_base = h/3.;
     
     // cone
     translate([0,0,cone_base ]) 
-    nose_cone_haack(l=h-cone_base, r=w1, c=1/3, wall_thickness=wall_thickness);
+    nose_cone_haack(l=h-cone_base, r=w1, c=1/3, wall_thickness=w1-w2);
     //nose_cone_power(h/2, w1, n=.6);
     //nose_cone_eliptical(w1, 0.90*w1, 1);
     
@@ -48,12 +47,10 @@ module rocket_nose(h, body_id) {
     }
     
     // threaded coupler bottom
-    coupler_height = body_id/4.0;
-    
     color("purple", 0.75)
-    translate([0,0,2])
-    female_coupler(body_id-0.5, coupler_height);
+        translate([0,0,2])
+        female_coupler(body_id-0.5, coupler_height);
     
 }
 
-rocket_nose(100,30, $fn=100);
+rocket_nose(100, 30*1.1, 30, coupler_height=30, $fn=100);

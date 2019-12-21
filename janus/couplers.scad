@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 1019 Jose D. Saura
+Copyright (c) 2019 Jose D. Saura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ module coupler(od, hook=true)
     wall_thickness = 0.05 * od;
     w1 = od/2;
     difference() {
-        cylinder(coupler_height, w1, w1, $fn=50);
+        cylinder(coupler_height, w1, w1, $fn=150);
         w2 = w1 - wall_thickness;
         translate([0,0,-.1])
         cylinder(coupler_height+1, w2, w2);
@@ -47,9 +47,9 @@ module coupler_eject(od, hook=true)
     w1 = od/2;
     difference() {
         union() {
-            cylinder(coupler_height/2, w1-.2, w1-.1, $fn=100);  // conical -don't glue this end 
+            cylinder(coupler_height/2, w1-.2, w1-.1, $fn=150);  // conical -don't glue this end 
             translate([0,0,coupler_height/2])
-                cylinder(coupler_height/2, w1, w1, $fn=50); // fn=50 provides space for superglue
+                cylinder(coupler_height/2, w1, w1, $fn=50); 
         }
         
         w2 = w1 - wall_thickness;
@@ -68,11 +68,11 @@ module male_coupler_threaded(od, coupler_height)
     w1 = od/2;
     difference() {
         translate([0,0,0])   
-        threading(pitch = 2, d=2*w1, windings=coupler_height/2, full=true); 
+        threading(pitch = 2, d=2*w1, windings=coupler_height/2, full=true, $fn=150); 
 
         w2 = w1 - wall_thickness;
         translate([0,0,-.1])
-        cylinder(coupler_height+3, w2, w2);
+        cylinder(coupler_height+3, w2, w2, $fn=150);
 
     }
     
@@ -90,7 +90,7 @@ module male_coupler_with_hook(od, coupler_height)
 
         w2 = w1 - wall_thickness;
         translate([0,0,-.1])
-        cylinder(coupler_height+3, w2, w2);
+        cylinder(coupler_height+3, w2, w2, $fn=150);
 
     }
     
@@ -189,7 +189,7 @@ module male_coupler_with_shock_cord_attachment(od_threaded, od_smooth, thread_he
 }
 module female_coupler(od, coupler_height)
 {
-    Threading(pitch = 2., d=od, windings=coupler_height); 
+    Threading(pitch = 2., d=od, windings=coupler_height/2.+1, $fn=150); 
 }
 
 
@@ -304,7 +304,7 @@ difference()
      r = 40;
      translate([0,0,4])
         male_coupler_with_shock_cord_attachment(od_threaded=r-1.0, 
-                    od_smooth=r,thread_height=30, shoulder_heigth=30, $fn=100);
+                    od_smooth=r,thread_height=30, shoulder_heigth=30, $fn=150);
      /*
        color("red", 0.6)
         female_coupler(r-0.5, 10, $fn=100);

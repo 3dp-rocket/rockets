@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 1019 Jose D. Saura
+Copyright (c) 2019 Jose D. Saura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,19 +24,19 @@ SOFTWARE.
 use <couplers.scad>
 use <hcylinder.scad>
 
+shoulder_glue_gap = 0.2; // CF=0.2, Nylon & PETG = 0
+
 module shoulder(height, w1, w2) {
     color("red")
     {
-        hcylinder(height, w1, w2);
+        hcylinder(height, D=w1, d=w2);
     }
-
 }
 
-module parachute_compartment(total_height, body_id, shoulder_height=0)
+module parachute_compartment(total_height, rocket_od, body_id, shoulder_height=0, coupler_height=0)
 {
-    wall_thickness = body_id * 0.05;
-    w1 = body_id/2 + wall_thickness;
-    w2 = body_id/2;
+    w1 = rocket_od/2.;
+    w2 = body_id/2.;
     compartment_height = total_height-shoulder_height;
     
     difference() {
@@ -45,7 +45,7 @@ module parachute_compartment(total_height, body_id, shoulder_height=0)
             if (shoulder_height > 0) {
                 translate([0,0,compartment_height])
                     //shoulder(shoulder_height, (w1+w2)/2., w2);
-                    shoulder(shoulder_height, w1, (w1+w2)/2.);
+                    shoulder(shoulder_height, w1, (w1+w2)/2.+shoulder_glue_gap);
             }
         }
         translate([0,0,-0.01])
@@ -53,19 +53,18 @@ module parachute_compartment(total_height, body_id, shoulder_height=0)
     }
 
     // threaded coupler bottom
-    coupler_height = body_id/4;
+    //coupler_height = body_id/4;
     translate([0,0,2])
-    color("purple", 0.75)
-    female_coupler(body_id-0.5, coupler_height);
+        color("purple", 0.75)
+        female_coupler(body_id-0.5, coupler_height);
     
     
 }
 
-module parachute_compartment_extension(total_height, body_id, shoulder_height=0)
+module parachute_compartment_extension(total_height, rocket_od, body_id, shoulder_height=0, vent_hole_od=0)
 {
-    wall_thickness = body_id * 0.05;
-    w1 = body_id/2 + wall_thickness;
-    w2 = body_id/2;
+    w1 = rocket_od/2.;
+    w2 = body_id/2.;
     compartment_height = total_height-shoulder_height;
     
     difference() {
@@ -74,22 +73,28 @@ module parachute_compartment_extension(total_height, body_id, shoulder_height=0)
             if (shoulder_height > 0) {
                 translate([0,0,compartment_height])
                     //shoulder(shoulder_height, w1, (w1+w2)/2.);
-                    shoulder(shoulder_height, (w1+w2)/2., w2);
+                    shoulder(shoulder_height, (w1+w2)/2.-shoulder_glue_gap, w2);
             }
         }
         translate([0,0,-0.01])
         cylinder(compartment_height+0.1, w2, w2);
+        
+        if (vent_hole_od>0) {
+            // vent hole
+            translate([0,body_id,body_id])
+            rotate([90,0,0])
+                #cylinder(body_id*2,1,1);
+        }
     }
 
-    // shoulder
+    
     
 }
 
-module parachute_compartment_middle_extension(total_height, body_id, shoulder_height=0)
+module parachute_compartment_middle_extension(total_height, rocket_od, body_id, shoulder_height=0)
 {
-    wall_thickness = body_id * 0.05;
-    w1 = body_id/2 + wall_thickness;
-    w2 = body_id/2;
+    w1 = rocket_od/2.;
+    w2 = body_id/2.;
     compartment_height = total_height-2*shoulder_height;
     
     difference() {
@@ -99,12 +104,12 @@ module parachute_compartment_middle_extension(total_height, body_id, shoulder_he
             if (shoulder_height > 0) {
                 translate([0,0,compartment_height+shoulder_height])
                     //shoulder(shoulder_height, w1, (w1+w2)/2.);
-                    shoulder(shoulder_height, (w1+w2)/2., w2);
+                    shoulder(shoulder_height, (w1+w2)/2.-shoulder_glue_gap, w2);
             }
             if (shoulder_height > 0) {
                 translate([0,0,0])
                     //shoulder(shoulder_height, (w1+w2)/2., w2);
-                    shoulder(shoulder_height, w1, (w1+w2)/2.);
+                    shoulder(shoulder_height, w1, (w1+w2)/2.+shoulder_glue_gap);
             }
         }
         translate([0,0,-0.01])
@@ -116,10 +121,10 @@ module parachute_compartment_middle_extension(total_height, body_id, shoulder_he
 }
     
 shoulder_height = 30;
-parachute_compartment(200, 50, shoulder_height=shoulder_height, $fn=100);
+parachute_compartment(200, 50*1.1, 50, shoulder_height=shoulder_height, coupler_height=30, $fn=100);
 
 translate([0,0,250])
-    parachute_compartment_extension(200, 50, shoulder_height=shoulder_height, $fn=100);
+    parachute_compartment_extension(200, 50*1.1, 50, shoulder_height=shoulder_height, vent_hole_od=2, $fn=100);
 
 translate([0,0,500])
-    parachute_compartment_middle_extension(200, 50, shoulder_height=shoulder_height, $fn=100);
+    parachute_compartment_middle_extension(200, 50*1.1, 50, shoulder_height=shoulder_height, $fn=100);
