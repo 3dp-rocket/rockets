@@ -23,8 +23,9 @@ SOFTWARE.
 */
 use <couplers.scad>
 use <hcylinder.scad>
+use <autofn.scad>
 
-shoulder_glue_gap = 0.2; // CF=0.2, Nylon & PETG = 0
+shoulder_glue_gap = 0.0; // CF=0.2, Nylon & PETG = 0
 
 module shoulder(height, w1, w2) {
     color("red")
@@ -41,7 +42,7 @@ module parachute_compartment(total_height, rocket_od, body_id, shoulder_height=0
     
     difference() {
         union() {
-            cylinder(compartment_height, w1, w1);
+            cylinder(compartment_height, w1, w1, $fn=fn(rocket_od));
             if (shoulder_height > 0) {
                 translate([0,0,compartment_height])
                     //shoulder(shoulder_height, (w1+w2)/2., w2);
@@ -49,14 +50,14 @@ module parachute_compartment(total_height, rocket_od, body_id, shoulder_height=0
             }
         }
         translate([0,0,-0.01])
-        cylinder(compartment_height+0.1, w2, w2);
+        cylinder(compartment_height+0.1, w2, w2, $fn=fn(rocket_od));
     }
 
     // threaded coupler bottom
     //coupler_height = body_id/4;
     translate([0,0,2])
         color("purple", 0.75)
-        female_coupler(body_id-0.5, coupler_height);
+        female_coupler(body_id, coupler_height);
     
     
 }
@@ -69,7 +70,7 @@ module parachute_compartment_extension(total_height, rocket_od, body_id, shoulde
     
     difference() {
         union() {
-            cylinder(compartment_height, w1, w1);
+            cylinder(compartment_height, w1, w1, $fn=fn(rocket_od));
             if (shoulder_height > 0) {
                 translate([0,0,compartment_height])
                     //shoulder(shoulder_height, w1, (w1+w2)/2.);
@@ -77,7 +78,7 @@ module parachute_compartment_extension(total_height, rocket_od, body_id, shoulde
             }
         }
         translate([0,0,-0.01])
-        cylinder(compartment_height+0.1, w2, w2);
+        cylinder(compartment_height+0.1, w2, w2, $fn=fn(rocket_od));
         
         if (vent_hole_od>0) {
             // vent hole
@@ -100,7 +101,7 @@ module parachute_compartment_middle_extension(total_height, rocket_od, body_id, 
     difference() {
         union() {
             translate([0,0,shoulder_height])
-                cylinder(compartment_height, w1, w1);
+                cylinder(compartment_height, w1, w1, $fn=fn(rocket_od));
             if (shoulder_height > 0) {
                 translate([0,0,compartment_height+shoulder_height])
                     //shoulder(shoulder_height, w1, (w1+w2)/2.);
@@ -113,7 +114,7 @@ module parachute_compartment_middle_extension(total_height, rocket_od, body_id, 
             }
         }
         translate([0,0,-0.01])
-        cylinder(compartment_height+shoulder_height+0.1, w2, w2);
+        cylinder(compartment_height+shoulder_height+0.1, w2, w2,$fn=fn(rocket_od));
     }
 
     // shoulder

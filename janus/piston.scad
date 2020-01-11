@@ -22,8 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-use <Threading.scad>    // https://www.thingiverse.com/thing:1659079
+use <BOSL/threading.scad>    
+use <hcylinder.scad>
 use <couplers.scad>
+use <autofn.scad>
 
 // Designed for this cord:
 // https://www.amazon.com/gp/product/B00OVI9XE6/ref=ppx_yo_dt_b_search_asin_image?ie=UTF8&psc=1
@@ -38,19 +40,19 @@ module piston(od)
             wall_thickness = 0.05 * od;
             w1 = od/2-0.1; // -0.1 to ensure it rides smoothly
             difference() {
-                cylinder(piston_height, w1, w1);
+                cylinder(piston_height, w1, w1, $fn=fn(od));
                 
                 w2 = w1 - wall_thickness;
                 translate([0,0,0])
-                cylinder(piston_height+1, w2, w2);
+                cylinder(piston_height+1, w2, w2, $fn=fn(od));
             }
         
-            cylinder(2*wall_thickness, w1, w1);
-            cylinder(10, 2*thread_size, 2*thread_size);
+            cylinder(2*wall_thickness, w1, w1, $fn=fn(od));
+            cylinder(10, 2*thread_size, 2*thread_size, $fn=fn(od));
         }
         
         translate([0,0,-.1])
-        cylinder(100, thread_size, thread_size);
+        cylinder(100, thread_size, thread_size, $fn=fn(od));
     }
 }
 
@@ -59,8 +61,7 @@ module piston(od)
 module piston_with_screw(od)
 {
     thread_size = .1 * od;
-    w1 = od/2; // -0.1 to ensure it rides smoothly
-    echo("piston OD", 2*w1);
+    w1 = od/2;
 
     difference()
     {
@@ -69,14 +70,14 @@ module piston_with_screw(od)
             
             wall_thickness = 0.05 * od;
             difference() {
-                cylinder(piston_height, w1, w1);
+                cylinder(piston_height, w1, w1, $fn=fn(od));
                 
                 w2 = w1 - wall_thickness;
                 translate([0,0,0])
-                cylinder(piston_height+1, w2, w2);
+                cylinder(piston_height+1, w2, w2, $fn=fn(od));
             }
         
-            cylinder(2*wall_thickness, w1, w1);
+            cylinder(2*wall_thickness, w1, w1, $fn=fn(od));
         }
         
         translate([0,0,-.1])
@@ -93,19 +94,36 @@ module piston_with_screw(od)
     }
     
     translate([0,0,0])
-    Threading(pitch = 2., d=2.*thread_size, windings=10); 
+    //Threading(pitch = 2., d=2.*thread_size, windings=10);
+    hcylinder(20, thread_size+2, thread_size);
+    female_coupler(2.*thread_size, 20);
 
 }
 
 module thread_lock_screw(od)
 {
     
-    thread_size = .1 * od;
+    thread_size = .1 * od - 0.2;
+    pitch=2;
+    starts=1;
     difference() {
         union() {
             cylinder(4, 2*thread_size, 2*thread_size, $fn=12);
             cylinder(22, 0.8*thread_size, 0.8*thread_size, $fn=100);
-            threading(pitch = 2., d=2.*thread_size-0.5, windings=10); 
+            
+            trapezoidal_threaded_rod(
+                d=2*thread_size, 
+                l=20, 
+                internal=false,
+                thread_angle=30,
+                thread_depth=pitch/2,
+                pitch=pitch, 
+                left_handed=false, 
+                bevel=true, 
+                starts=starts,
+                align= [0,0,1], 
+                $fa=1, $fs=1);
+            
         }
         translate([0,5,0])
         cube([2,thread_size+10,100], center=true);
@@ -117,10 +135,10 @@ module thread_lock_screw(od)
 
 
 
-piston_with_screw(65, $fn=100);
+piston_with_screw(65);
 //translate([65/2,0,5])
 //color("red") cube(1);
 
-//translate([100,0,0])
-//thread_lock_screw(65);
+translate([100,0,0])
+thread_lock_screw(65);
 

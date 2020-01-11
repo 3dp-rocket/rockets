@@ -24,6 +24,7 @@ SOFTWARE.
 
 use <../parts/nose.scad>
 use <couplers.scad>
+use <autofn.scad>
 
 module rocket_nose(h, rocket_od, body_id, coupler_height) {
     
@@ -35,22 +36,22 @@ module rocket_nose(h, rocket_od, body_id, coupler_height) {
     
     // cone
     translate([0,0,cone_base ]) 
-    nose_cone_haack(l=h-cone_base, r=w1, c=1/3, wall_thickness=w1-w2);
+    nose_cone_haack(l=h-cone_base, r=w1, c=1/3, wall_thickness=w1-w2, $fn=fn(rocket_od));
     //nose_cone_power(h/2, w1, n=.6);
     //nose_cone_eliptical(w1, 0.90*w1, 1);
     
     // base
     difference() {
-        cylinder(cone_base+.001, w1, w1); // +.001 so they overlap, got separated on slicer
+        cylinder(cone_base+.001, w1, w1, $fn=fn(rocket_od)); // +.001 so they overlap, got separated on slicer
         translate([0,0,-0.01])
-        cylinder(cone_base+0.1, w2, w2);
+        cylinder(cone_base+0.1, w2, w2, $fn=fn(rocket_od));
     }
     
     // threaded coupler bottom
     color("purple", 0.75)
         translate([0,0,2])
-        female_coupler(body_id-0.5, coupler_height);
+        female_coupler(body_id, coupler_height);
     
 }
 
-rocket_nose(100, 30*1.1, 30, coupler_height=30, $fn=100);
+rocket_nose(100, 30*1.1, 30, coupler_height=30);

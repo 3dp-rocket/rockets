@@ -50,10 +50,10 @@ module fin_shell(semi_span, root_chord, fin_slot_width, fin_slot_height, b=0, fi
 
     translate([0,0,fin_slot_height*0.99]) {
         if (fin_type==0)
-            fin_delta_clipped(semi_span, root_chord, fin_slot_width, b);
+            fin_delta_clipped(semi_span, root_chord, fin_slot_width, b, $fn=100);
         if (fin_type==1)
             fin_ellipsoid(root_chord=root_chord, 
-        semi_span=semi_span, base_width=fin_slot_width,fn_x=100);//2.0*fin_slot_width/3.
+        semi_span=semi_span, base_width=fin_slot_width*2./3.,fn_x=100);//2.0*fin_slot_width/3.
     }
     
     key_h = 0.04 * root_chord;

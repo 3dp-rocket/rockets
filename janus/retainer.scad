@@ -22,25 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-use <Threading.scad>    // https://www.thingiverse.com/thing:1659079
+use <couplers.scad>
+use <hcylinder.scad>
+use <autofn.scad>
 
-
-module retainer_nut(od,id, height, pitch) {
+module retainer_nut(od,id, height, pitch=2, starts=1) {
     union() {
-           base_height = 4;
-           windings = (height+pitch)/pitch;
-           translate([0,0,height+base_height])
-            rotate([0,180,0])
-            Threading(pitch = pitch, D=od, d=id, windings=windings, steps=80, $fn=100); 
+           base_height = max(4, od/16); // revise
+           translate([0,0,base_height]) {
+               hcylinder(height, od/2, id/2);
+               female_coupler(id, height, pitch, starts);
+           }
         
            difference() {
-               cylinder(base_height, od/2.,od/2., $fn=100); //base
+               cylinder(base_height, od/2.,od/2., $fn=fn(od)); //base
                translate([0,0,-.1])
-               cylinder(base_height+1.0, id*.3, id*.3); // hole in base
+               cylinder(base_height+1.0, id*.3, id*.3, $fn=fn(id*.3)); // hole in base
            }
 
     }
-    
+   
 }
 
 retainer_nut(50, 40, 20, 2.0);

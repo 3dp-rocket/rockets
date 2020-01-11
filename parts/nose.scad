@@ -71,7 +71,7 @@ module nose_cone_haack(l, r, c=0, wall_thickness=1)
 
     translate([0,0,l])
     rotate([0,180,0])
-    rotate_extrude($fn = 100) 
+    rotate_extrude()
       polygon(V2);
     
 }
@@ -94,7 +94,7 @@ module nose_cone_power(l, r, n=0.6, wall_thickness=1)
     
     translate([0,0,l])
     rotate([0,180,0])
-    rotate_extrude($fn = 100) 
+    rotate_extrude() 
         polygon(V2);
         
 }
@@ -108,7 +108,7 @@ module nose_cone_eliptical(od, id, h=4)
     // create inside perimeter and outside perimeter series
     V2 = concat(od*V0, id*V1);
 
-    rotate_extrude($fn = 100) {
+    rotate_extrude() {
         polygon(V2);
     }
     

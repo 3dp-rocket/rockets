@@ -23,7 +23,8 @@ SOFTWARE.
 */
 
 
-use <Threading.scad>    // https://www.thingiverse.com/thing:1659079
+use <BOSL/threading.scad>
+use <autofn.scad>
 use <hcylinder.scad>
 use <couplers.scad>
 use <launch_lug.scad>
@@ -61,7 +62,7 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
     color("purple", 0.75)
     translate([0,0,motor_tube_height-1])
     rotate([0,180,0])
-    female_coupler(rocket_id-0.5, coupler_height);  // ?-1
+    female_coupler(rocket_id, coupler_height);  // ?-1
     
     // launch lugs
     if (launch_lug_type>0)
@@ -136,11 +137,25 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
             // thread for motor retainer
             thread_od = (rocket_id+motor_tube_od)/2.;
             pitch = 2.0;
+            starts=1;
             color("blue")
             difference() {
-                threading(pitch = pitch, d=thread_od, windings=retainer_height/pitch, full=true); 
+                // Retainer male thread 
+                trapezoidal_threaded_rod(
+                d=thread_od-0.2, 
+                l=retainer_height, 
+                internal=false,
+                thread_angle=30,
+                thread_depth=pitch/2,
+                pitch=pitch, 
+                left_handed=false, 
+                bevel=true, 
+                starts=starts,
+                align= [0,0,1], 
+                $fa=1, $fs=1);
+
                 translate([0,0,-.1])
-                    cylinder(retainer_height+10, motor_tube_id / 2.0, motor_tube_id / 2.0);
+                    cylinder(retainer_height+10, motor_tube_id / 2.0, motor_tube_id / 2.0, $fn=fn(motor_tube_id));
             }
                 
             color("green", 0.8)

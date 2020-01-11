@@ -28,6 +28,7 @@ SOFTWARE.
 //  http://www.perfectflite.com/Downloads/StratoLoggerCF%20manual.pdf (vent hole sizes)
 
 use <couplers.scad>
+use <autofn.scad>
 
 module instrument_compartment(instrument_box_height, rocket_od, body_id, vent_hole_od, coupler_height)
 {
@@ -35,9 +36,9 @@ module instrument_compartment(instrument_box_height, rocket_od, body_id, vent_ho
     w2 = body_id/2.;
     
     difference() {
-        cylinder(instrument_box_height, w1, w1);
+        cylinder(instrument_box_height, w1, w1, $fn=fn(rocket_od));
         translate([0,0,-0.01])
-        cylinder(instrument_box_height+0.1, w2, w2);
+        cylinder(instrument_box_height+0.1, w2, w2, $fn=fn(rocket_od));
         
         // vent hole
         translate([0,0,instrument_box_height/2])
@@ -49,16 +50,17 @@ module instrument_compartment(instrument_box_height, rocket_od, body_id, vent_ho
     // threaded coupler bottom
     color("purple", 0.75)
     translate([0,0,2])
-    female_coupler(body_id-0.5, coupler_height);
+    female_coupler(body_id, coupler_height);
 
     // threaded coupler top
     color("purple", 0.75)
     translate([0,0,instrument_box_height-1])
     rotate([0,180,0])
-    female_coupler(body_id-0.5, coupler_height);
+    female_coupler(body_id, coupler_height);
     
 }
 
+/*
 module instrument_compartment_cap(od)
 {
     // coupler
@@ -66,13 +68,14 @@ module instrument_compartment_cap(od)
     wall_thickness = 0.1 * od;
     w1 = od/2;
     difference() {
-        cylinder(coupler_height, w1, w1);
+        cylinder(coupler_height, w1, w1, $fn=fn(od));
         w2 = w1 - wall_thickness;
         translate([0,0,-.1])
-        cylinder(coupler_height+1, w2, w2);
+        cylinder(coupler_height+1, w2, w2, $fn=fn(od));
     }
-    cylinder(wall_thickness, w1, w1);
+    cylinder(wall_thickness, w1, w1, $fn=fn(od));
     
 }
+*/
 
 instrument_compartment(70, , 50*1.1, 50, 0.1, coupler_height=30, $fn=100);
