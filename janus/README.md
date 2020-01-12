@@ -2,7 +2,7 @@
 
 This rocket has been designed so parts can be replaced and assembled without the use of glue (except for the main tube that requires snapping togetther shorter tubes glued with cyanoacrylate). A [blue tube](https://www.alwaysreadyrocketry.com/) is recommended to insulate the motor from the rocket motor support tube.If you use other tubes, you will need to adjust the paper_tube_wall_thickness setting accordingly.
 
-The script for making threads (screws) was copied from [thingiverse](http://www.thingiverse.com/thing:900137). Make sure to keep the header intact and give proper attribution.
+The OpenSCAD [BOSL](https://www.openscad.org/libraries.html) library is required for threads.
 
 [OpenRocket Model](./OpenRocket-29mm.pdf)
 
