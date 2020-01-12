@@ -198,7 +198,7 @@ arrange()
             //full_motor_retainer_height = motor_ring_height + (add_thrust_stopper?2:motor_retainer_height);
             full_motor_retainer_height = motor_ring_height + motor_retainer_height + (add_thrust_stopper?2:0);
 
-            retainer_nut(rocket_od,retainer_male_od+1.0, full_motor_retainer_height, pitch=pitch, $fn=150);  
+            retainer_nut(rocket_od,retainer_male_od+0.2, full_motor_retainer_height, pitch=pitch, $fn=150);  
         }
 
 
