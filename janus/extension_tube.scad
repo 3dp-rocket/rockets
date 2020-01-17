@@ -118,43 +118,44 @@ module ridges(body_id,h , step=4)
 
 }
 
-module escapement_ring(body_id)
+module escapement_ring(od, id)
 {
-    r1 = body_id/2.;
-    r2 = r1 * 0.80;
+    // r1 should be the rocket body id radius
+    r1 = od/2.;
+    // r2+1 allows ring to expand without pushing into the paper motor tube
+    r2 = id/2.+1; 
     h = 20;
-    //echo("t",r1-r2);
+    //echo("EXP RING", od,id);
     difference() {
-        hcylinder(h, r1, r2);
+        union() {
+            hcylinder(h, r1, r2);
+            // this will leave holders after the gap is cut 
+            // for a tool to squeeze the ring
+            rotate([0,0,45])
+            translate([(r1+r2)/2, 0,h])    
+                cube([r1-r2-6,18,9], center=true);
+        }
         
         //ridges
-        ridges(body_id, h);
+        ridges(od, h);
         
         // holes for shock cord
         hole_r = 1.8;
         for (a=[0:90:360-1])
         rotate([0,0,a])
-            translate([(r1+r2)/2, 0,-0.01])
+            translate([(r1+r2)/2-1, 0,-0.01])
                 cylinder(100,r=hole_r, $fn=fn(hole_r));
         
         // expansion 
-        gap = 3.14 * 2; // shrink circ. by 2mm when ring is squeezed
+        gap = 3.14 * 3.0; // shrink circ. by 3mm when ring is squeezed
         rotate([0,0,45])
         translate([(r1+r2)/2, 0,h/2])
-        cube([100,gap,h+1], center=true);
+        cube([od/2,gap,h+10], center=true);
         
-        
-        // holes for tool
-        for (a=[35:20:56])
-        rotate([0,0,a])
-            translate([(r1+r2)/2, 0,-0.01])
-                cylinder(100,r=2.2, $fn=fn(hole_r));
-
         
     }
     
-    
-    
+
 }
 
 difference() 
@@ -166,7 +167,9 @@ union() {
 
     translate([0,0,145+0.5])
         color("blue", 0.8)
-        escapement_ring(92.657);
+        !escapement_ring(od=92.657, id=63.93); 
+        //escapement_ring(51.8021, 35.739);
+    
 }
 
     translate([0,-60,0])
@@ -176,6 +179,7 @@ union() {
 
 translate([0,0,-15.6])
 male_coupler_threaded(od=92.657-0.2, coupler_height=38);
+
 
 
 

@@ -32,42 +32,6 @@ use <BOSL/threading.scad>
 use <autofn.scad>
 use <hcylinder.scad>
 
-/*module coupler(od, hook=true)
-{
-    // coupler
-    coupler_height = od;
-    wall_thickness = 0.05 * od;
-    w1 = od/2;
-    difference() {
-        cylinder(coupler_height, w1, w1, $fn=fn(od));
-        w2 = w1 - wall_thickness;
-        translate([0,0,-.1])
-        cylinder(coupler_height+1, w2, w2, $fn=fn(od));
-    }
-}
-
-module coupler_eject(od, hook=true)
-{
-    // coupler
-    coupler_height = od;
-    wall_thickness = 0.05 * od;
-    w1 = od/2;
-    difference() {
-        union() {
-            cylinder(coupler_height/2, w1-.2, w1-.1, $fn=150);  // conical -don't glue this end 
-            translate([0,0,coupler_height/2])
-                cylinder(coupler_height/2, w1, w1, $fn=50); 
-        }
-        
-        w2 = w1 - wall_thickness;
-        translate([0,0,-.1])
-        cylinder(coupler_height+1, w2, w2);
-    }
-    
-  
-
-}
-*/
 
 module male_coupler_threaded(od, coupler_height, pitch=2, starts=1)
 {
@@ -112,77 +76,6 @@ module male_coupler_threaded_baffle(od, coupler_height)
 
 }
 
-/*
-
-
-module male_coupler_with_hook(od, coupler_height)
-{
-    // coupler
-    wall_thickness = 0.075 * od;
-    w1 = od/2;
-    difference() {
-        translate([0,0,0])   
-        threading(pitch = 2, d=2*w1, windings=coupler_height/2, full=true, $fn=fn(od)); 
-
-        w2 = w1 - wall_thickness;
-        translate([0,0,-.1])
-        cylinder(coupler_height+3, w2, w2, $fn=fn(od));
-
-    }
-    
-    difference() {
-        sh = coupler_height/2.;
-        translate([0,0, sh/2.])
-        cube([od-wall_thickness-0.3, w1*0.3,sh], center=true);
-        for(h=[0,2,3]) {
-            translate([od/4-h*od/4,0, sh/2.])
-            rotate([90,0,0])
-                cylinder(10,2,2, center=true,$fn=fn(od));
-        }
-    }
-}
-
-
-module mcoupler_closed(od, coupler_height)
-{
-    // coupler
-    wall_thickness = 0.075 * od;
-    w1 = od/2;
-    difference() {
-        translate([0,0,0])   
-        threading(pitch = 2, d=2*w1, windings=coupler_height/2, full=true, $fn=fn(od)); 
-
-        w2 = w1 - wall_thickness;
-        translate([0,0,-.1])
-        cylinder(coupler_height+3, w2, w2, $fn=fn(od));
-
-    }
-    translate([0,0,0])   
-        cylinder(5, w1-wall_thickness+.1, w1-wall_thickness+.1, $fn=fn(od));
-
- 
-}
-
-module m2coupler(od, coupler_height)
-{
-    // coupler
-    wall_thickness = 0.075 * od;
-    w1 = od/2;
-    difference() {
-        translate([0,0,0])   
-        union() {
-            threading(pitch = 2, d=2*w1, windings=coupler_height/4, full=true, $fn=fn(od)); 
-            translate([0,0,coupler_height/2])   
-            cylinder(coupler_height/2, w1, w1, $fn=fn(od));
-        }
-        w2 = w1 - wall_thickness;
-        translate([0,0,-.1])
-        cylinder(coupler_height+3, w2, w2, $fn=fn(od));
-
-    }
- 
-}
-*/
 module male_coupler_with_shock_cord_attachment(od_threaded, od_smooth, thread_height, shoulder_heigth)
 {
     // coupler
@@ -223,12 +116,20 @@ module male_coupler_with_shock_cord_attachment(od_threaded, od_smooth, thread_he
     translate([0,0,0])   
         cylinder(cap_height, w1-wall_thickness+.1, w1-wall_thickness+.1, $fn=fn(od_threaded));
     
+    //
+    // cord mount
+    //
     difference() {
-        // cord mount
+        // cube with rounded ends
         mh = max(thread_height,20);
         translate([0,0,mh/2])
-        #cube([od_threaded/4.,od_threaded-2*wall_thickness,mh], center=true);
+        #difference() {
+            cube([od_threaded/4.,od_threaded-wall_thickness,mh], center=true);
+            translate([0,0,-mh])
+                hcylinder(10*mh, od_threaded/2, od_threaded/2-wall_thickness/2);
+        }
         
+        // cut two holes for shock cord
         for(d = [od_threaded/4,-od_threaded/4]) {
             translate([-od_smooth/2,d,cap_height+ 2*2.5])
             rotate([0,90,0])
@@ -262,42 +163,7 @@ module female_coupler(od, coupler_height, pitch=2, starts=1)
 
 }
 
-/*
 
-
-module male_coupler_with_motor_tube_lock(od, motor_tube_od, coupler_height)
-{
-    // coupler
-    wall_thickness = 0.075 * od;
-    w1 = od/2.;
-    w2 = w1 - wall_thickness;
-    
-    difference() {
-        translate([0,0,0])   
-        threading(pitch = 2., d=2*w1, windings=coupler_height/2., full=true); 
-        translate([0,0,-.1])
-        cylinder(coupler_height+10, w2, w2);
-
-    }
-
-    tube_support_od = motor_tube_od/2.0 * 1.1;
-    tube_support_id = motor_tube_od/2.0;
-    
-    difference() {
-        cylinder(coupler_height, tube_support_od, tube_support_od);
-        translate([0,0,-.1])
-            cylinder(coupler_height+1, tube_support_id, tube_support_id);
-    }
-    
-    // attach inner and outer couplers
-    for(a = [0:36:360]) {
-        rotate([0,0,a])
-            translate([(w2+tube_support_od)/2,0,coupler_height/2.0])
-                cube([w2-tube_support_od+0.01,1,coupler_height], center=true);
-    }
-}
-
-*/
 module male_coupler_with_test_charge(od, coupler_height)
 {
     // coupler
@@ -389,23 +255,13 @@ module baffle_b(od)
  //   baffle_b(od=64.891);
 
 
-//translate([-100,0,0])
-//male_coupler_with_shock_cord_attachment(od_threaded=64, od_smooth=64, thread_height=20, shoulder_heigth=20);
 
 
 
 difference() 
 {
-    union() 
-    {
-        hcylinder(40,70/2, 64.891/2.0 +0); 
+    male_coupler_with_shock_cord_attachment(od_threaded=64, od_smooth=64, thread_height=20,         shoulder_heigth=20);
         
-        !male_coupler_threaded(od=64.891-0.2, coupler_height=38, starts=1);
-        
-        translate([0,0,20])
-            color("pink")
-                female_coupler(od=64.891, coupler_height=38, starts=1);
-    }
     cube([64,64, 40]);
 }   
 

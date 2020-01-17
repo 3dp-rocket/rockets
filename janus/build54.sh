@@ -1,6 +1,6 @@
 openscad-nightly -D 'part="retainer"' -D 'model=8' -o stl/54mm/retainer.stl janus.scad
 openscad-nightly -D 'part="motor_mount"' -D 'model=8' -o stl/54mm/motor_mount.stl janus.scad 
-openscad-nightly -D 'part="fin"' -D 'model=8' -o stl/54mm/fin.stl janus.scad  
+openscad-nightly -D 'part="fin"' -D 'model=8' -D 'fin_type=1' -o stl/54mm/fin.stl janus.scad  
 
 openscad-nightly -D 'part="extension"' -D 'model=8' -o stl/54mm/extension.stl janus.scad
 openscad-nightly -D 'part="escapement_ring"' -D 'model=8' -o stl/54mm/escapement_ring.stl janus.scad  

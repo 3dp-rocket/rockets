@@ -79,7 +79,7 @@ module fin_ellipsoid(root_chord, semi_span, base_width, fn_x=40) {
 
 
 
-//translate([105,0,0])
-//    fin_delta_clipped(l=100, h=100, base_width=5, $fn=100);
+translate([105,0,0])
+    fin_delta_clipped(l=100, h=100, base_width=5, $fn=100);
 
 fin_ellipsoid(root_chord=100, semi_span=100, base_width=5);

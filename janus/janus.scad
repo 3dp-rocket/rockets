@@ -57,7 +57,7 @@ FIN_ELLIPSOID=1;
 
 //*********************************************
 // Set these variables.
-model = D29;  // a,A,B,C....F
+model = D54;  // a,A,B,C....F
 add_thrust_stopper = model < F ? true : false;
 paper_tube_wall_thickness = BLUE_TUBE_THICKNESS; //STD_TUB_THICKNESS,BLUE_TUBE_THICKNESS
 motor_ring_height = 10.; // height of ring around composite motor (0 for estes, 10 aerotech)
@@ -68,7 +68,7 @@ shrink = 1.01; // shrink compensation PETG=1.05 NYLON=1.02
 rocket_id_motor_id_ratio = 1.5944;
 // rocket_id_od_ratio controls outer wall thickness [1.1]
 rocket_id_od_ratio = 1.08;
-fin_brim_size = 5;  // when > 0 prints brim around fin of given size to minimize warping
+fin_brim_size = 0;  //5 -- when > 0 prints brim around fin of given size to minimize warping
 //*********************************************
  // shrink com///c
 MOTOR_OD = 0;
@@ -82,7 +82,7 @@ rocket_parameters = [
     [ 24.0, 100.00],  // D**
     [ 29.0, 114.00],  // E
     [ 29.0, 114.00],  // F
-    [ 38.37, 135.00], // 38mm  38+0.37 because that's the blue tube inner diameter!
+    [ 38.37, 135.00], // 38mm  38+0.37 because that's the blue tube inner diameter! //todo: fix this
     [ 54.37, 135.00]   //54 mm
     
 
@@ -230,7 +230,7 @@ arrange()
             extension_tube(parachute_compartment_height, rocket_od, rocket_id, motor_tube_id, coupler_height/2.); 
         if (part=="escapement_ring" || part=="all" )
             translate([-rocket_id,+rocket_id,0])
-            escapement_ring(rocket_id); 
+            escapement_ring(od=rocket_id, id=motor_tube_od); 
     }
 
     if (part=="coupler2" || part == "all")
