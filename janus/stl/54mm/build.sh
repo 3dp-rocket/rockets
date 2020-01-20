@@ -18,3 +18,5 @@
 /home/jose/3P/Prusa/PrusaSlicer.AppImage -g --center 125,100 --output ./gcode --load config.ini parachute_extension.stl
 /home/jose/3P/Prusa/PrusaSlicer.AppImage -g --center 125,100 --output ./gcode --load config.ini instrument.stl  
 /home/jose/3P/Prusa/PrusaSlicer.AppImage -g --center 125,100 --output ./gcode --load config.ini nose.stl
+
+/home/jose/3P/Prusa/PrusaSlicer.AppImage -g --center 125,100 --output ./gcode --load config.ini male_coupler_with_test_charge.stl

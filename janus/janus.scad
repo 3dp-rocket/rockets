@@ -278,7 +278,8 @@ arrange()
 
     
     if (part=="male_coupler_with_test_charge")
-        male_coupler_with_test_charge(rocket_id-screw_male_female_gap, coupler_height);
+        male_coupler_with_test_charge(rocket_id-screw_male_female_gap, 0.75*coupler_height);
+    //# -1.20
     
 
     //translate([0,0,597])

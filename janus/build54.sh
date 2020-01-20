@@ -1,5 +1,5 @@
 openscad-nightly -D 'part="retainer"' -D 'model=8' -o stl/54mm/retainer.stl janus.scad
-openscad-nightly -D 'part="motor_mount"' -D 'model=8' -o stl/54mm/motor_mount.stl janus.scad 
+openscad-nightly -D 'part="motor_mount"' -D 'model=8' -D 'fin_type=1' -o stl/54mm/motor_mount.stl janus.scad 
 openscad-nightly -D 'part="fin"' -D 'model=8' -D 'fin_type=1' -o stl/54mm/fin.stl janus.scad  
 
 openscad-nightly -D 'part="extension"' -D 'model=8' -o stl/54mm/extension.stl janus.scad
@@ -20,6 +20,6 @@ openscad-nightly -D 'part="coupler2"' -D 'model=8' -o stl/54mm/coupler2.stl janu
 openscad-nightly -D 'part="coupler3"' -D 'model=8' -o stl/54mm/coupler3.stl janus.scad  
 openscad-nightly -D 'part="coupler4"' -D 'model=8' -o stl/54mm/coupler4.stl janus.scad  
 
-
+openscad-nightly -D 'part="male_coupler_with_test_charge"' -D 'model=8' -o stl/54mm/male_coupler_with_test_charge.stl janus.scad  
 
 

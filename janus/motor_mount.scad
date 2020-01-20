@@ -164,14 +164,14 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
                 // they connect the motor tube to outer shell and support the fins
                 // supports start above the retainer ring (retainer_height)
                 for(a=[0:360/3:360]) {
-                    rotate([0,0,a])
+                    rotate([0,0,a-2.5])
                     {
                         translate([0,0,retainer_height])
                         {
-                            t = (rocket_id-motor_tube_od)/2.;
-                            rotate_extrude(angle=30, convexity=10)
-                            translate([motor_tube_od/2.-0.1, 0, 0])  // manifold error =>
-                            square([t+.2,motor_height], center=false); //mandifold error+.2
+                            t = (rocket_id-motor_tube_od)/2. * 1.1;
+                            rotate_extrude(angle=35) //, convexity=10)
+                            translate([motor_tube_od/2.-0.5, 0, 0])  // manifold error =>
+                            square([t,motor_height], center=false); //manifold error+.2
                         }
                     }
                 }
@@ -237,8 +237,10 @@ function polygon_slot(fin_slot_height,fin_slot_width) =
 //rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height, fin_height
 //fin_slot_width, fin_slot_height, retainer_height,launch_lug_type, add_thrust_stopper=false)
 
+difference() {
 fin_motor_mount(rocket_od=101.14, rocket_id=91.94, motor_tube_od=64.52, motor_tube_id=58.65, motor_height=135, motor_tube_height=200, fin_height=132.806, fin_slot_width=14.6644, fin_slot_height=18.3084, retainer_height=35.19,coupler_height=20,launch_lug_type=3, $fn = 100);
-
-
+    
+    cube([300,300, 100], center=true);
+}
 
 

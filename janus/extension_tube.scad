@@ -118,6 +118,13 @@ module ridges(body_id,h , step=4)
 
 }
 
+/* 
+Still in beta. The idea for this ring is to help disipate the shock cord energy 
+and avoid a zipper. It fits at the bottom of the extension tube. The 4 shock cords goes through
+the top section of the tube and then the holes on this part and are tied together.
+When the shock cord pulls hard, this part will move through the tube and hopefully absorve
+some of the energy... never tested.
+*/
 module escapement_ring(od, id)
 {
     // r1 should be the rocket body id radius
@@ -147,7 +154,7 @@ module escapement_ring(od, id)
                 cylinder(100,r=hole_r, $fn=fn(hole_r));
         
         // expansion 
-        gap = 3.14 * 3.0; // shrink circ. by 3mm when ring is squeezed
+        gap = 3.14 * 4; // gap size
         rotate([0,0,45])
         translate([(r1+r2)/2, 0,h/2])
         cube([od/2,gap,h+10], center=true);

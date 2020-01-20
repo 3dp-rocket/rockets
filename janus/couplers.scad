@@ -163,7 +163,10 @@ module female_coupler(od, coupler_height, pitch=2, starts=1)
 
 }
 
-
+// This part can be screwed into the rockey body instead of the fin can
+// Place and glue with epoxy two small nails on the holes on the bottom
+// solder to the inside ends two  wires to connect to the igniter
+// designed for the aerotech charges. The red cap fits into the center hole.
 module male_coupler_with_test_charge(od, coupler_height)
 {
     // coupler
@@ -171,7 +174,19 @@ module male_coupler_with_test_charge(od, coupler_height)
     w1 = od/2;
     difference() {
         translate([0,0,0])   
-        threading(pitch = 2, d=2*w1, windings=coupler_height/2, full=true, $fn=fn(od), steps=steps(od)); 
+        trapezoidal_threaded_rod(
+                            d=od, 
+                            l=coupler_height, 
+                            internal=false,
+                            thread_angle=30,
+                            thread_depth=1,
+                            pitch=2, 
+                            left_handed=false, 
+                            bevel=true, 
+                            starts=1,
+                            align= [0,0,1], 
+                            $fn=fn(od));
+                            //$fa=1, $fs=1);
 
         w2 = w1 - wall_thickness;
         translate([0,0,-.1])
@@ -215,9 +230,14 @@ translate([-100,0,0])
 translate([0,-100,0])
     female_coupler(od=100, coupler_height=80);
 
-translate([0,100,0])
-    male_coupler_with_test_charge(60, 60);    
 */
+
+translate([0,100,0]) {
+    
+    male_coupler_with_test_charge(60, 60);    
+    //color("red", alpha=0.5) male_coupler_threaded(60, 60);
+    
+}
 
 module baffle_a(od)
 {
