@@ -220,6 +220,75 @@ module male_coupler_with_test_charge(od, coupler_height)
     
     
 }
+
+module test_ejection_charge(motor_od, coupler_height)
+{
+    // holds a standard Aerotech ejection charge
+    // can be placed where a motor goes and it is 
+    //used to perform static test on the ground to ensure parachute/cone
+    // eject properly.
+    // thread wires through the holes and cover the big holes with epoxy
+    // a stainless steel nail with wires attached also works well 
+    // and makes it easier to connect the igniter wires.
+    // The brown tube covers the charge to prevent damages to the 
+    // rocket's motor tube.
+    // Status : Untested
+    
+    
+    charge_holder_od = 20;
+    charge_holder_id = 12.6;
+    
+    // ring that sits outside on motor tube
+    color("blue")
+    difference() {
+        cylinder(10, d=motor_od+8, $fn=100);
+
+        // holes for nails used for electric contacts
+        translate([charge_holder_od/2+3,0,-1])
+            cylinder(60, d1=2.,d2=2., $fn=100);
+        // holes for screws for electric contacts
+        translate([-charge_holder_od/2-3,0,-1])
+            cylinder(60, d1=2.,d2=2., $fn=100);
+    }
+    
+    // ring that sits inside of motor tube
+    color("green")
+    translate([0,0,10])
+    difference() {
+        cylinder(20, d=motor_od, $fn=100);
+
+        // shoulder
+        translate([0,0,10])
+        hcylinder(50, motor_od/2-1, motor_od/2-2, $fn=fn(motor_od));
+        
+        // holes for wires
+        translate([charge_holder_od/2+3,0,-1])
+            cylinder(60, d1=4.,d2=4., $fn=100);
+        // holes for wires
+        translate([-charge_holder_od/2-3,0,-1])
+            cylinder(60, d1=4.,d2=4., $fn=100);
+    }
+    
+    
+    // ejection charge holder
+    color("red")
+    difference() {
+        cylinder(coupler_height, d=charge_holder_od, $fn=100);
+        hull() {
+        translate([0,0, coupler_height-15+0.002])
+            cylinder(15.01, d=charge_holder_id, $fn=100); // hole for test charge
+        translate([0,0, coupler_height-20])
+             cylinder(5, d1=0,d2=charge_holder_id, $fn=100);
+        }
+    }
+    
+    // baffle
+    color("brown")
+    translate([2*motor_od,0,0])
+        hcylinder(100, motor_od/2-1, motor_od/2-2, $fn=fn(motor_od));
+    
+}
+
 /*
 translate([100,0,0])
     male_coupler_threaded(od=100,coupler_height=50);
@@ -234,7 +303,7 @@ translate([0,-100,0])
 
 translate([0,100,0]) {
     
-    male_coupler_with_test_charge(60, 60);    
+    !test_ejection_charge(54, 60);    
     //color("red", alpha=0.5) male_coupler_threaded(60, 60);
     
 }
