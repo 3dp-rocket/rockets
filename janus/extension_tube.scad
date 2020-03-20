@@ -100,7 +100,7 @@ module extension_tube(compartment_height, rocket_od, body_id, motor_tube_id, cou
     
     translate([0,0,coupler_height + holder_height])
     color("white")
-        ridges(body_id,200-2*coupler_height - holder_height, step=8);
+        ridges(body_id,compartment_height-2*coupler_height - holder_height, step=8);
 
 }
 
@@ -174,7 +174,7 @@ union() {
 
     translate([0,0,145+0.5])
         color("blue", 0.8)
-        !escapement_ring(od=92.657, id=63.93); 
+        escapement_ring(od=92.657, id=63.93); 
         //escapement_ring(51.8021, 35.739);
     
 }

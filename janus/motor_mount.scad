@@ -35,7 +35,7 @@ LUG_ROD_1_8 = 1;
 LUG_ROD_3_16 = 2;
 LUG_RAIL_8010 =3;
 
-module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height, fin_height, fin_slot_width, fin_slot_height, retainer_height,coupler_height, launch_lug_type, add_thrust_stopper=false)
+module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height, fin_height, fin_slot_width, fin_slot_height, number_of_fins, retainer_height,coupler_height, launch_lug_type, add_thrust_stopper=false)
 {
     motor_support_thickness = 0.1 * motor_tube_id;
     motor_tube_od = (motor_tube_id + motor_support_thickness) ;
@@ -50,10 +50,10 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
                 hcylinder(motor_tube_height-retainer_height, w1, rocket_id/2.0);
             
             // motor mount
-            motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height,  fin_height, fin_slot_width, retainer_height, add_thrust_stopper, motor_tube_height);
+            motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height,  fin_height, fin_slot_width, number_of_fins, retainer_height, add_thrust_stopper, motor_tube_height);
         }
         
-        fin_slots(motor_tube_od, fin_height,fin_slot_width, motor_tube_height, retainer_height, fin_slot_height);
+        fin_slots(motor_tube_od, fin_height,fin_slot_width, motor_tube_height, retainer_height, fin_slot_height, number_of_fins);
 
     }
     
@@ -74,8 +74,9 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
             block_width = 0.05 * rocket_id;
             lug_length = max(rocket_od/1.5, 16); //body_id/2;
             rocket_wall_width = rocket_od-rocket_id;
-        
-            rotate([0,0,60+15])
+            lug_rotation = 60+(number_of_fins==3?15:0);
+
+            rotate([0,0,lug_rotation])
             {
                 lug_x = (rocket_id)/2 + lug_od/2 + rocket_wall_width -0.01;//+ block_width/2;
                 translate([lug_x,0,retainer_height + lug_length/2 ])
@@ -92,15 +93,16 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
         }
         else
         {
+            lug_rotation = 60+(number_of_fins==3?15:0);
             lug_heigth = 0.75 * rocket_id;
-            rotate(60+15)
+            rotate(lug_rotation)
             translate([rocket_id/2+6,0,retainer_height])
             rotate(-90)
             rail_launch_lug(lug_heigth);
             
             translate([0,0, motor_tube_height - lug_heigth ])
             {
-                rotate(60+15)
+                rotate(lug_rotation)
                 translate([rocket_id/2+6,0,0])
                 rotate(-90)
                 rail_launch_lug(lug_heigth);
@@ -112,7 +114,7 @@ module fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor
     
 }
 
-module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_height, fin_slot_width, retainer_height, add_thrust_stopper, motor_tube_height)
+module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_height, fin_slot_width, number_of_fins, retainer_height, add_thrust_stopper, motor_tube_height)
 {
     // motor mount
    top_ring_heigth = motor_height * 0.15;
@@ -163,7 +165,7 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
                 // supports along the tube where fins will go
                 // they connect the motor tube to outer shell and support the fins
                 // supports start above the retainer ring (retainer_height)
-                for(a=[0:360/3:360]) {
+                for(a=[0:360/number_of_fins:360]) {
                     rotate([0,0,a-2.5])
                     {
                         translate([0,0,retainer_height])
@@ -194,10 +196,10 @@ module motor_mount(motor_tube_od, motor_tube_id, rocket_id, motor_height, fin_he
    
 }
 
-module fin_slots(motor_tube_od, fin_height, fin_slot_width, motor_tube_height, retainer_height, fin_slot_height)
+module fin_slots(motor_tube_od, fin_height, fin_slot_width, motor_tube_height, retainer_height, fin_slot_height, number_of_fins)
 {
     // slots
-    for(a=[0:360/3:360]) {
+    for(a=[0:360/number_of_fins:360]) {
         rotate([0,0,a])
         {
            translate([0,0,0])
@@ -238,7 +240,7 @@ function polygon_slot(fin_slot_height,fin_slot_width) =
 //fin_slot_width, fin_slot_height, retainer_height,launch_lug_type, add_thrust_stopper=false)
 
 difference() {
-fin_motor_mount(rocket_od=101.14, rocket_id=91.94, motor_tube_od=64.52, motor_tube_id=58.65, motor_height=135, motor_tube_height=200, fin_height=132.806, fin_slot_width=14.6644, fin_slot_height=18.3084, retainer_height=35.19,coupler_height=20,launch_lug_type=3, $fn = 100);
+fin_motor_mount(rocket_od=101.14, rocket_id=91.94, motor_tube_od=64.52, motor_tube_id=58.65, motor_height=135, motor_tube_height=200, fin_height=132.806, fin_slot_width=14.6644, fin_slot_height=18.3084, number_of_fins=4, retainer_height=35.19,coupler_height=20,launch_lug_type=3, $fn = 100);
     
     cube([300,300, 100], center=true);
 }

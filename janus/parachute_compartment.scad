@@ -129,3 +129,9 @@ translate([0,0,250])
 
 translate([0,0,500])
     parachute_compartment_middle_extension(200, 50*1.1, 50, shoulder_height=shoulder_height, $fn=100);
+
+//sr = (56+1.4)/2;
+//translate([0,0,-200])
+//    !cylinder(100, sr, sr, $fn=200);
+
+

@@ -221,7 +221,7 @@ module male_coupler_with_test_charge(od, coupler_height)
     
 }
 
-module test_ejection_charge(motor_od, coupler_height)
+module test_ejection_charge_holder(motor_od, coupler_height)
 {
     // holds a standard Aerotech ejection charge
     // can be placed where a motor goes and it is 
@@ -255,7 +255,7 @@ module test_ejection_charge(motor_od, coupler_height)
     color("green")
     translate([0,0,10])
     difference() {
-        cylinder(20, d=motor_od, $fn=100);
+        cylinder(20, d=motor_od, $fn=fn(motor_od));
 
         // shoulder
         translate([0,0,10])
@@ -282,10 +282,11 @@ module test_ejection_charge(motor_od, coupler_height)
         }
     }
     
-    // baffle
+    // screen - must be printed as spiral vase (1 layer thickness) - top/bottom layers = 0
+    // when printed like that it will be a hollow cylinder
     color("brown")
     translate([2*motor_od,0,0])
-        hcylinder(100, motor_od/2-1, motor_od/2-2, $fn=fn(motor_od));
+        cylinder(100, motor_od/2-1.1, motor_od/2-1.1, $fn=fn(motor_od));
     
 }
 
@@ -301,12 +302,6 @@ translate([0,-100,0])
 
 */
 
-translate([0,100,0]) {
-    
-    !test_ejection_charge(54, 60);    
-    //color("red", alpha=0.5) male_coupler_threaded(60, 60);
-    
-}
 
 module baffle_a(od)
 {
@@ -344,6 +339,12 @@ module baffle_b(od)
  //   baffle_b(od=64.891);
 
 
+translate([0,100,0]) {
+    
+    !test_ejection_charge_holder(38, 60);    // 54, 38
+    //color("red", alpha=0.5) male_coupler_threaded(60, 60);
+    
+}
 
 
 

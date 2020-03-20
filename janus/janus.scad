@@ -62,7 +62,7 @@ add_thrust_stopper = model < F ? true : false;
 paper_tube_wall_thickness = BLUE_TUBE_THICKNESS; //STD_TUB_THICKNESS,BLUE_TUBE_THICKNESS
 motor_ring_height = 10.; // height of ring around composite motor (0 for estes, 10 aerotech)
 fin_type = FIN_CLIPPED_DELTA ; // FIN_CLIPPED_DELTA or FIN_ELLIPSOID ELLIPSOID Works great but take a long time to render
-shrink = 1.01; // shrink compensation PETG=1.05 NYLON=1.02
+number_of_fins = 3;
 
 // rocket_id_motor_id_ratio controls distance between motor tube and body wall [D38:1.5675] [D54:1.5944]
 rocket_id_motor_id_ratio = 1.5944;
@@ -70,29 +70,26 @@ rocket_id_motor_id_ratio = 1.5944;
 rocket_id_od_ratio = 1.08;
 fin_brim_size = 0;  //5 -- when > 0 prints brim around fin of given size to minimize warping
 //*********************************************
- // shrink com///c
 MOTOR_OD = 0;
 MOTOR_LENGTH = 1;
 
 rocket_parameters = [
-    [ 13.3, 44.2],  // a*
-    [ 13.3, 70.00],  // A
-    [ 13.3, 70.00],  // B
-    [ 18.0, 70.00],  // C*
-    [ 24.0, 100.00],  // D**
-    [ 29.0, 114.00],  // E
-    [ 29.0, 114.00],  // F
-    [ 38.37, 135.00], // 38mm  38+0.37 because that's the blue tube inner diameter! //todo: fix this
-    [ 54.37, 135.00]   //54 mm
-    
-
+    [ 13.200, 44.2],   // a*
+    [ 13.200, 70.00],  // A
+    [ 13.200, 70.00],  // B
+    [ 18.200, 70.00],  // C*
+    [ 24.240, 100.00], // D**
+    [ 29.290, 114.00], // E
+    [ 29.290, 114.00], // F
+    [ 38.753, 135.00], // 38mm
+    [ 54.914, 135.00]  //54 mm
 ];
 
 printer_max_height = 200.0;
 
 p = rocket_parameters[model];
 
-motor_od = p[MOTOR_OD]* shrink; // * (1 + 0.15); // + tube
+motor_od = p[MOTOR_OD];
 motor_height = p[MOTOR_LENGTH];
 motor_tube_height = min(2.0 * motor_height ,printer_max_height);
 
@@ -198,21 +195,21 @@ arrange()
             //full_motor_retainer_height = motor_ring_height + (add_thrust_stopper?2:motor_retainer_height);
             full_motor_retainer_height = motor_ring_height + motor_retainer_height + (add_thrust_stopper?2:0);
 
-            retainer_nut(rocket_od,retainer_male_od+0.2, full_motor_retainer_height, pitch=pitch, $fn=150);  
+            retainer_nut(rocket_od,retainer_male_od+0.2, full_motor_retainer_height, pitch=pitch);  
         }
 
 
         if (part=="motor_mount" || part=="all" || part == "fin") {
             if (part=="motor_mount" || part=="all")
                 rotate([0,part=="motor_mount" ? 180 : 0,0]) // rotate for proper print orientation
-            fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height,  fin_length,fin_slot_width, fin_slot_height,motor_retainer_height ,coupler_height/2., launch_lug_type, add_thrust_stopper);
+            fin_motor_mount(rocket_od, rocket_id, motor_tube_od, motor_tube_id, motor_height, motor_tube_height,  fin_length,fin_slot_width, fin_slot_height, number_of_fins, motor_retainer_height ,coupler_height/2., launch_lug_type, add_thrust_stopper);
 
 
             if (part=="fin"|| part=="all") {
                 // when part is set to 'fin' as in batch.sh the fin is printed
                 // on the right orientation for printing
                 
-                for (a=[0:360/3:part=="all"?360:0]) {
+                for (a=[0:360/number_of_fins:part=="all"?360:0]) {
                     translate([0,0,fin_length+20])
                     rotate([0,part == "all" ? 90 : 0,part == "all" ? a+15 : 0])
                     translate([0,0,rocket_id])
