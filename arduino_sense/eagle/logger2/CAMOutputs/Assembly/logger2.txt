@@ -1,0 +1,8 @@
+Partlist exported from /home/jose/EAGLE/projects/logger2/logger2.sch at 3/22/20 10:22 PM
+
+Qty Value      Device       Package   Parts Description               POPULARITY
+1   1X2-3.5MM  1X2-3.5MM    1X2-3.5MM J1    3.5mm Terminal block                
+1   470        R-US_V526-0  V526-0    R2    RESISTOR, American symbol           
+1   L1         LEDSFH482    SFH482    LED1  LED                       0         
+1   NANODEVICE NANODEVICE   NANO      MC1   Arduino NANO 33 BLE Sense           
+1   SD         PINHD-1X8BIG 1X08-BIG  JP3   PIN HEADER                          

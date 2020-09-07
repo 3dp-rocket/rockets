@@ -18,7 +18,6 @@
 #include <SPI.h>
 #include <SD.h>
 
-
 // buffer size for data we will write to the SDcard
 #define BUFFER_SIZE 2048
 
@@ -26,7 +25,7 @@
 String filename;
 
 const int chipSelect = 10;
-byte status_led = 8;
+byte status_led = A0;
 
 File dataFile;
 
@@ -371,6 +370,7 @@ void loop() {
       break;
   }
 
+  
   loop_count++;
 
 }

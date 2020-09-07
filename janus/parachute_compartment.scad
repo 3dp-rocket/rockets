@@ -24,6 +24,7 @@ SOFTWARE.
 use <couplers.scad>
 use <hcylinder.scad>
 use <autofn.scad>
+use <cord_attachment.scad>
 
 shoulder_glue_gap = 0.0; // CF=0.2, Nylon & PETG = 0
 
@@ -34,11 +35,12 @@ module shoulder(height, w1, w2) {
     }
 }
 
-module parachute_compartment(total_height, rocket_od, body_id, shoulder_height=0, coupler_height=0)
+module parachute_compartment(total_height, rocket_od, body_id,motor_tube_id=0, shoulder_height=0, coupler_height=0, add_cord_attachment=false)
 {
     w1 = rocket_od/2.;
     w2 = body_id/2.;
     compartment_height = total_height-shoulder_height;
+    
     
     difference() {
         union() {
@@ -51,6 +53,11 @@ module parachute_compartment(total_height, rocket_od, body_id, shoulder_height=0
         }
         translate([0,0,-0.01])
         cylinder(compartment_height+0.1, w2, w2, $fn=fn(rocket_od));
+    }
+
+    if (add_cord_attachment) {
+        translate([0,0,coupler_height*1.2])
+            cord_attachment(rocket_od, body_id, motor_tube_id);
     }
 
     // threaded coupler bottom
@@ -122,7 +129,7 @@ module parachute_compartment_middle_extension(total_height, rocket_od, body_id, 
 }
     
 shoulder_height = 30;
-parachute_compartment(200, 50*1.1, 50, shoulder_height=shoulder_height, coupler_height=30, $fn=100);
+parachute_compartment(200, 50*1.1, 50, 20, shoulder_height=shoulder_height, coupler_height=30, $fn=100);
 
 translate([0,0,250])
     parachute_compartment_extension(200, 50*1.1, 50, shoulder_height=shoulder_height, vent_hole_od=2, $fn=100);

@@ -34,6 +34,9 @@ use <motor_mount.scad>
 use <retainer.scad>
 use <autofn.scad>
 
+include <constants.scad>
+
+
 part = "all";
 
 a = 0;
@@ -57,10 +60,10 @@ FIN_ELLIPSOID=1;
 
 //*********************************************
 // Set these variables.
-model = D54;  // a,A,B,C....F
+model = C;  // a,A,B,C....F
 add_thrust_stopper = model < F ? true : false;
 paper_tube_wall_thickness = BLUE_TUBE_THICKNESS; //STD_TUB_THICKNESS,BLUE_TUBE_THICKNESS
-motor_ring_height = 10.; // height of ring around composite motor (0 for estes, 10 aerotech)
+motor_ring_height = model>F ? 10. : 0; // height of ring around composite motor (0 for estes, 10 aerotech)
 fin_type = FIN_CLIPPED_DELTA ; // FIN_CLIPPED_DELTA or FIN_ELLIPSOID ELLIPSOID Works great but take a long time to render
 number_of_fins = 3;
 
@@ -120,9 +123,14 @@ vent_hole_od = instrument_compartment_height * rocket_id* .00037;
 
 parachute_compartment_height = min(100 + 3*motor_od + (7.5188 * motor_od-body_height), printer_max_height);
 
+// if true a cord attachment module will be added inside the parachute tube 
+// for rockets that are small
+cord_attachment_in_parachute_tube = model >= D ? false : true;
+
 extension_tube_height = parachute_compartment_height; 
 
-shoulder_height= (model==D38 || model==D54 || model==D29 )? 30 : 0;
+// large diam rockets generate tubes with shoulder - for rockets < D don't create the tubes
+shoulder_height= (model==D38 || model==D54 || model==D29 )? 30 : (model<D) ?0 : 20;
 
 pitch = 2.0; 
 screw_male_female_gap = 0.2; //1.40; // mm gap between male/female threads
@@ -165,7 +173,7 @@ echo("coupler_height", coupler_height);
 echo(str("fn(", rocket_od, ")=", fn(rocket_od), " preview:", $preview));
 
 // define height of each layer
-layers = [30,motor_tube_height,coupler_height,200,coupler_height,parachute_compartment_height, coupler_height*1.5, instrument_compartment_height, coupler_height, 300];
+layers = [30,motor_tube_height,coupler_height,(model>D?200:0),(model>D?coupler_height:0),parachute_compartment_height, coupler_height*1.5, instrument_compartment_height, coupler_height, 300];
 
 // return sum of array elements from i to n
 // a[1,2,3] 
@@ -192,8 +200,8 @@ arrange()
     {
 
         if (part=="retainer" || part=="all") {
-            //full_motor_retainer_height = motor_ring_height + (add_thrust_stopper?2:motor_retainer_height);
-            full_motor_retainer_height = motor_ring_height + motor_retainer_height + (add_thrust_stopper?2:0);
+            //full_motor_retainer_height = motor_retainer_height; 
+            full_motor_retainer_height = motor_ring_height + motor_retainer_height + (add_thrust_stopper?0:0);
 
             retainer_nut(rocket_od,retainer_male_od+0.2, full_motor_retainer_height, pitch=pitch);  
         }
@@ -222,21 +230,21 @@ arrange()
             male_coupler_threaded(rocket_id-screw_male_female_gap, coupler_height);
             
 
-    if (part=="extension" || part=="escapement_ring" || part=="all" ) {
+    if ( (part=="extension" || part=="escapement_ring" || part=="all") && (model >D) ) {
         if (part=="extension" || part=="all" )
-            extension_tube(parachute_compartment_height, rocket_od, rocket_id, motor_tube_id, coupler_height/2.); 
+            extension_tube(parachute_compartment_height, rocket_od, rocket_id, motor_tube_id, coupler_height/2., escapement=false); 
         if (part=="escapement_ring" || part=="all" )
             translate([-rocket_id,+rocket_id,0])
             escapement_ring(od=rocket_id, id=motor_tube_od); 
     }
 
-    if (part=="coupler2" || part == "all")
+    if ((part=="coupler2" || part == "all") && (model >D))
         //male_coupler_threaded_baffle(rocket_id-1.0, coupler_height);
         male_coupler_threaded(rocket_id-screw_male_female_gap, coupler_height);
 
     if (part=="parachute" || part=="all" || part == "piston" || part=="parachute_extension" || part == "parachute_middle_extension" || part=="piston_screw") {
         if (part=="parachute" || part == "all") {
-            parachute_compartment(total_height=parachute_compartment_height, rocket_od=rocket_od,body_id =rocket_id, shoulder_height=shoulder_height, coupler_height=coupler_height/2.);
+            parachute_compartment(total_height=parachute_compartment_height, rocket_od=rocket_od,body_id =rocket_id, motor_tube_id=motor_tube_id, shoulder_height=shoulder_height, coupler_height=coupler_height/2., add_cord_attachment=cord_attachment_in_parachute_tube);
         }
         if ((part=="parachute_extension" || part == "all") && shoulder_height>0) {    
             translate([rocket_id,-rocket_id,0])

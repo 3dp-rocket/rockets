@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2020-03-23T05:22:22Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.6.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "logger2"
+        },
+        "Owner": "josesaura josesaura <josesaura@hotmail.com>",
+        "Size": {
+            "X": 31.73,
+            "Y": 61.9
+        }
+    }
+}
